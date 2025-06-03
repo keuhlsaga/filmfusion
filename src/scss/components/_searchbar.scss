@@ -1,0 +1,67 @@
+@use "../abstracts" as *;
+
+.searchbar {
+  position: absolute;
+  top: 5rem;
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  width: $container;
+  margin-inline: calc((100vw - $container) / 2);
+
+  &__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    height: 3rem;
+    border: 1px solid #fff;
+    border-radius: $spacing-4;
+    overflow: hidden;
+    animation: slide-up 300ms linear;
+    background: hsla(0, 0%, 0%, 75%);
+  }
+
+  .form-control {
+    height: 100%;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    padding-inline: $spacing-1;
+  }
+
+  &__category {
+    @extend .form-control;
+  }
+
+  &__icon {
+    @extend .form-control;
+    display: flex;
+    align-items: center;
+    padding-inline: $spacing-4;
+  }
+
+  &__search-input {
+    @extend .form-control;
+    flex-grow: 1;
+  }
+
+  .btn--clear {
+    @extend .form-control;
+    display: none;
+    padding-inline: $spacing-4;
+  }
+
+  &__search-input:not(:placeholder-shown) + .btn--clear {
+    display: block;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    width: 0;
+  }
+  to {
+    width: 50%;
+  }
+}

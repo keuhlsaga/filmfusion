@@ -1,0 +1,45 @@
+@use "../abstracts" as *;
+
+.content-section {
+  display: flex;
+
+  &__label-container {
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    padding: $spacing-4;
+    font-size: map-get($font-size, 1);
+    position: relative;
+  }
+
+  &__label {
+    position: sticky;
+    top: $spacing-6;
+    user-select: none;
+  }
+
+  &__tabs-list {
+    display: flex;
+  }
+
+  &__tabs-item {
+    padding: $spacing-4;
+  }
+
+  &__sliders-container {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-4;
+    width: 100%;
+    padding: $spacing-4;
+  }
+}
+
+.btn--to-top {
+  position: fixed;
+  bottom: 4rem;
+  right: 3rem;
+  z-index: 10;
+  padding: $spacing-4;
+  font-size: map-get($font-size, 3);
+  cursor: pointer;
+}

@@ -1,0 +1,209 @@
+@use "../abstracts" as *;
+
+.slider {
+  --card-width: 10rem;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+
+  @media (min-width: map-get($breakpoint, medium)) {
+    --card-width: 13.75rem;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  &__heading {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    font-size: map-get($font-size, 1);
+    font-size: clamp(1.5rem, 1.1429rem + 1.7857vw, 2rem);
+  }
+
+  &__body {
+    position: relative;
+  }
+
+  &__view-all {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  &__view-all:hover &__arrow-right {
+    animation: arrowRight 1000ms ease infinite;
+  }
+
+  @keyframes arrowRight {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(5px);
+    }
+  }
+
+  &__inner {
+    display: flex;
+    gap: $spacing-3;
+    // padding: $spacing-3;
+    transition: 250ms linear;
+
+    overflow-x: auto;
+    --webkit-scrollbar-width: none;
+    scrollbar-width: none;
+
+    scroll-snap-type: inline mandatory;
+    scroll-behavior: smooth;
+    scroll-padding: $spacing-3;
+    overscroll-behavior-inline: contain;
+  }
+
+  &__link {
+    flex: 0 0 var(--card-width);
+    scroll-snap-align: start;
+    -webkit-user-drag: none;
+    user-drag: none;
+  }
+
+  &__card {
+    display: flex;
+    border-radius: $spacing-1;
+    position: relative;
+    overflow: hidden;
+    background-color: hsl(0, 0%, 0%, 0.8);
+
+    @media (min-width: map-get($breakpoint, large)) {
+      &:hover {
+        z-index: 1;
+        overflow: visible;
+        border-radius: $spacing-1 0 0 $spacing-1;
+      }
+
+      &--reverse:hover {
+        border-radius: 0 $spacing-1 $spacing-1 0;
+      }
+    }
+  }
+
+  &__card-img {
+    object-fit: cover;
+    aspect-ratio: 6 / 9;
+    border-radius: $spacing-1;
+    transition: 250ms ease-in-out;
+  }
+
+  &__card-info {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-2;
+    width: calc(var(--card-width) * 1.5);
+    height: 100%;
+    position: absolute;
+    top: -1px;
+    left: 0;
+    transform: translateX(var(--card-width));
+    opacity: 0;
+
+    background-color: hsl(0, 0%, 0%, 0.8);
+    backdrop-filter: blur(15px);
+    flex-grow: 1;
+    padding: $spacing-4;
+    border-radius: 0 $spacing-1 $spacing-1 0;
+
+    transition: opacity 250ms ease-in;
+
+    @media (min-width: map-get($breakpoint, large)) {
+    }
+  }
+
+  &__card-title {
+    font-size: map-get($font-size, 2);
+    font-weight: 500;
+    margin-bottom: $spacing-1;
+  }
+
+  &__card-details {
+    display: flex;
+    gap: $spacing-2;
+    font-size: map-get($font-size, 4);
+  }
+
+  &__card-genres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-2;
+
+    & span {
+      font-size: map-get($font-size, 4);
+      padding: $spacing-1 $spacing-2;
+      border-radius: $spacing-1;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+
+  &__card-overview {
+    margin-top: $spacing-2;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.8);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 7; // Limit to 7 lines
+    -webkit-box-orient: vertical;
+  }
+
+  &__btn {
+    position: absolute;
+    // top: $spacing-3;
+    // height: calc(100% - $spacing-3 * 2);
+    height: 100%;
+    padding-inline: $spacing-3;
+    background-color: transparent;
+    border: none;
+    z-index: 10;
+    cursor: pointer;
+    font-size: map-get($font-size, 2);
+
+    &--prev {
+      left: 0;
+    }
+
+    &--next {
+      right: -1px;
+    }
+
+    &--hidden {
+      // display: none;
+    }
+
+    &:hover {
+      background-color: hsl(0, 0%, 0%, 0.5);
+      backdrop-filter: blur(10px);
+    }
+  }
+
+  &__card:hover &__card-img {
+    filter: brightness(0.8);
+    scale: 0.9;
+  }
+
+  &__card:hover &__card-info {
+    opacity: 1;
+    z-index: 2;
+  }
+
+  &__card--reverse:hover &__card-info {
+    transform: translateX(calc(var(--card-width) * -1.5));
+    border-radius: $spacing-1 0 0 $spacing-1;
+  }
+}

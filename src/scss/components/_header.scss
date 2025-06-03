@@ -1,0 +1,92 @@
+@use "../abstracts" as *;
+
+.header {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: start;
+  align-items: center;
+  gap: $spacing-3;
+  width: $container;
+  margin-inline: calc((100% - $container) / 2);
+  padding: $spacing-2;
+  background-color: red;
+
+  &--home {
+    position: absolute;
+    top: 1rem;
+    z-index: 999;
+    background-color: transparent;
+  }
+
+  &__logo {
+    font-size: calc($base-font-size * 2);
+    padding: $spacing-2;
+  }
+
+  &__nav {
+    .btn {
+      @media (min-width: map-get($breakpoint, medium)) {
+        display: none;
+      }
+    }
+  }
+
+  &__nav-list {
+    display: flex;
+    gap: $spacing-2;
+
+    @media (max-width: map-get($breakpoint, medium)) {
+      height: 100%;
+      gap: 0;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      left: -100%;
+      // transform: translateX(-100%);
+      transition: 250ms ease-in-out;
+
+      &--show {
+        // transform: translateX(0);
+        left: 0;
+      }
+    }
+  }
+
+  &__nav-item {
+    display: flex;
+
+    &--menu {
+      position: relative;
+    }
+  }
+
+  &__nav-link {
+    width: 100%;
+    height: auto;
+    padding: $spacing-4;
+
+    // TODO
+    &:hover {
+      opacity: 0.5;
+    }
+  }
+
+  &__nav-sub-list {
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    transition: 250ms ease-in-out;
+
+    &--show {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
+  @media (min-width: map-get($breakpoint, medium)) {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}

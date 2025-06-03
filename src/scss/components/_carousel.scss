@@ -1,0 +1,308 @@
+@use "../abstracts" as *;
+
+.carousel {
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+  overflow: hidden;
+
+  &__item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    transition: 500ms ease-in;
+
+    &--active {
+      opacity: 1;
+    }
+  }
+
+  &__item-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    // filter: brightness(0.3);
+    user-select: none;
+  }
+
+  &__item-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-2;
+    width: 50%;
+    height: auto;
+    padding: $spacing-4;
+    user-select: none;
+
+    /* background-color: hsl(0, 0%, 0%, 0.3);
+    backdrop-filter: blur(4px); */
+
+    @media (max-width: map-get($breakpoint, large)) {
+      width: min(30rem, 100%);
+      height: fit-content;
+      top: 40%;
+      left: 50%;
+      translate: -50% -50%;
+    }
+  }
+
+  &__item-title {
+    font-size: map-get($font-size, 2);
+    font-weight: 700;
+  }
+
+  &__item-details {
+    display: flex;
+    gap: $spacing-2;
+    font-size: map-get($font-size, 4);
+  }
+
+  &__item-genres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-2;
+
+    & span {
+      font-size: map-get($font-size, 4);
+      padding: $spacing-1 $spacing-2;
+      border-radius: $spacing-1;
+      background-color: hsl(0, 0%, 100%, 0.3);
+      backdrop-filter: blur(5px);
+    }
+  }
+
+  &__item-overview {
+    line-height: 1.25;
+  }
+
+  &__slider {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+    width: 50vw;
+    height: 12rem;
+
+    // perspective
+    $perspective: 1500px;
+    -webkit-perspective: $perspective;
+    -moz-perspective: $perspective;
+    -ms-perspective: $perspective;
+    perspective: $perspective;
+
+    @media (max-width: map-get($breakpoint, large)) {
+      width: 100%;
+    }
+  }
+
+  // width, height, z-index, transform
+  /* &__slider-item {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    width: 6rem;
+    height: 9rem;
+    border-radius: $spacing-1;
+    opacity: 0;
+    z-index: 10;
+    overflow: hidden;
+    cursor: pointer;
+    transition: opacity 600ms ease-in, width 300ms ease-in, height 300ms ease-in,
+      z-index 300ms ease-in, transform 300ms ease-in;
+
+    // width: 8rem;
+    // height: 11rem;
+    // z-index: 0;
+    // transform: translateZ(-750px);
+
+    &
+
+    &--active {
+      opacity: 1;
+      width: 8rem;
+      height: 11rem;
+      z-index: 20;
+
+      // z-index: 3;
+      // transform: translateZ(0);
+    }
+
+    &--prev-1 {
+      opacity: 1;
+      width: 6rem;
+      height: 9rem;
+      z-index: 19;
+      transform: translateX(-7.5rem);
+
+      // z-index: 2;
+      // transform: translateX(-8rem) translateZ(-250px);
+    }
+
+    &--prev-2 {
+      opacity: 1;
+      width: 5rem;
+      height: 7rem;
+      z-index: 18;
+      transform: translateX(-13.5rem);
+
+      // z-index: 1;
+      // transform: translateX(-16rem) translateZ(-500px);
+    }
+
+    &--next-1 {
+      opacity: 1;
+      width: 6rem;
+      height: 9rem;
+      z-index: 19;
+      transform: translateX(7.5rem);
+
+      // z-index: 2;
+      // transform: translateX(8rem) translateZ(-250px);
+    }
+
+    &--next-2 {
+      opacity: 1;
+      width: 5rem;
+      height: 7rem;
+      z-index: 18;
+      transform: translateX(13.5rem);
+
+      // z-index: 1;
+      // transform: translateX(16rem) translateZ(-500px);
+    }
+
+    &:last-of-type {
+      outline: 2px solid lime;
+    }
+  } */
+
+  // perspective, translateX, translateZ
+  &__slider-item {
+    $slider-item-width: 8rem;
+    $slider-item-height: 11rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50% !important;
+    width: $slider-item-width;
+    height: $slider-item-height;
+    z-index: 0;
+    opacity: 0;
+    // border: 2px solid white;
+    border-radius: $spacing-1;
+    overflow: hidden;
+    cursor: pointer;
+    transition: opacity 600ms ease-in, width 300ms ease-in, height 300ms ease-in,
+      z-index 300ms ease-in, transform 300ms ease-in;
+
+    transform: translateZ(-750px);
+
+    &--active {
+      opacity: 1;
+      z-index: 3;
+      transform: translateZ(0);
+    }
+
+    &--prev-1 {
+      opacity: 1;
+      z-index: 2;
+      transform: translateX(-$slider-item-width) translateZ(-250px);
+    }
+
+    &--prev-2 {
+      opacity: 1;
+      z-index: 1;
+      transform: translateX(-$slider-item-width * 2) translateZ(-500px);
+    }
+
+    &--next-1 {
+      opacity: 1;
+      z-index: 2;
+      transform: translateX($slider-item-width) translateZ(-250px);
+    }
+
+    &--next-2 {
+      opacity: 1;
+      z-index: 1;
+      transform: translateX($slider-item-width * 2) translateZ(-500px);
+    }
+
+    @media (max-width: map-get($breakpoint, small)) {
+      $slider-item-width: 7rem;
+      $slider-item-height: 10rem;
+      width: $slider-item-width;
+      height: $slider-item-height;
+
+      &--active {
+        opacity: 1;
+        z-index: 3;
+        transform: translateZ(0);
+      }
+
+      &--prev-1 {
+        opacity: 1;
+        z-index: 2;
+        transform: translateX(-$slider-item-width) translateZ(-250px);
+      }
+
+      &--prev-2 {
+        opacity: 0;
+        z-index: 1;
+        transform: translateX(0) translateZ(-500px);
+      }
+
+      &--next-1 {
+        opacity: 1;
+        z-index: 2;
+        transform: translateX($slider-item-width) translateZ(-250px);
+      }
+
+      &--next-2 {
+        opacity: 0;
+        z-index: 1;
+        transform: translateX(0) translateZ(-500px);
+      }
+    }
+  }
+
+  &__slider-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: 250ms ease-in-out;
+
+    -webkit-backface-visibility: hidden;
+    -ms-transform: translateZ(0); /* IE 9 */
+    -webkit-transform: translateZ(0); /* Chrome, Safari, Opera */
+    transform: translateZ(0);
+
+    image-rendering: -moz-crisp-edges; /* Firefox */
+    image-rendering: -o-crisp-edges; /* Opera */
+    image-rendering: -webkit-optimize-contrast; /* Webkit (non-standard naming) */
+    image-rendering: crisp-edges;
+    -ms-interpolation-mode: nearest-neighbor; /* IE (non-standard property) */
+
+    @media (hover: hover) {
+      &:hover {
+        object-fit: cover;
+        transform: scale(1.1);
+      }
+    }
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
