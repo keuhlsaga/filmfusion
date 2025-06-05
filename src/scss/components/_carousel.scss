@@ -43,6 +43,11 @@
     /* background-color: hsl(0, 0%, 0%, 0.3);
     backdrop-filter: blur(4px); */
 
+    &:first-of-type {
+      opacity: 0;
+      animation: fade-in 600ms ease-in forwards 300ms;
+    }
+
     @media (max-width: map-get($breakpoint, large)) {
       width: min(30rem, 100%);
       height: fit-content;
@@ -86,8 +91,10 @@
     right: 0;
     bottom: 0;
     z-index: 10;
-    width: 50vw;
+    // width: 42.5vw;
+    width: 50%;
     height: 12rem;
+    opacity: 0;
 
     // perspective
     $perspective: 1500px;
@@ -95,6 +102,8 @@
     -moz-perspective: $perspective;
     -ms-perspective: $perspective;
     perspective: $perspective;
+
+    animation: fade-in 500ms ease-in forwards 600ms;
 
     @media (max-width: map-get($breakpoint, large)) {
       width: 100%;
@@ -199,10 +208,11 @@
     border-radius: $spacing-1;
     overflow: hidden;
     cursor: pointer;
-    transition: opacity 600ms ease-in, width 300ms ease-in, height 300ms ease-in,
-      z-index 300ms ease-in, transform 300ms ease-in;
+    // transition: opacity 600ms ease-in, width 300ms ease-in, height 300ms ease-in,
+    //   z-index 300ms ease-in, transform 300ms ease-in;
 
     transform: translateZ(-750px);
+    transition: 300ms linear;
 
     &--active {
       opacity: 1;
@@ -299,10 +309,11 @@
 }
 
 @keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
+  100% {
     opacity: 1;
   }
+}
+
+* {
+  outline: 1px solid lime;
 }

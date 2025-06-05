@@ -2,6 +2,7 @@
 
 .slider {
   --card-width: 10rem;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: $spacing-4;
@@ -33,13 +34,16 @@
     align-items: center;
     gap: $spacing-2;
 
-    &:hover {
-      opacity: 0.8;
+    @media (min-width: map-get($breakpoint, large)) {
+      &:hover {
+        opacity: 0.8;
+      }
     }
   }
-
-  &__view-all:hover &__arrow-right {
-    animation: arrowRight 1000ms ease infinite;
+  @media (min-width: map-get($breakpoint, large)) {
+    &__view-all:hover &__arrow-right {
+      animation: arrowRight 1000ms ease infinite;
+    }
   }
 
   @keyframes arrowRight {
@@ -71,8 +75,6 @@
   &__link {
     flex: 0 0 var(--card-width);
     scroll-snap-align: start;
-    -webkit-user-drag: none;
-    user-drag: none;
   }
 
   &__card {
@@ -186,24 +188,31 @@
       // display: none;
     }
 
-    &:hover {
-      background-color: hsl(0, 0%, 0%, 0.5);
-      backdrop-filter: blur(10px);
+    @media (min-width: map-get($breakpoint, large)) {
+      &:hover {
+        background-color: hsl(0, 0%, 0%, 0.5);
+        backdrop-filter: blur(10px);
+      }
+    }
+  }
+
+  @media (min-width: map-get($breakpoint, large)) {
+    &__card:hover &__card-img {
+      scale: 0.9;
+    }
+
+    &__card:hover &__card-info {
+      opacity: 1;
+      z-index: 2;
+    }
+
+    &__card--reverse:hover &__card-info {
+      transform: translateX(calc(var(--card-width) * -1.5));
+      border-radius: $spacing-1 0 0 $spacing-1;
     }
   }
 
   &__card:hover &__card-img {
     filter: brightness(0.8);
-    scale: 0.9;
-  }
-
-  &__card:hover &__card-info {
-    opacity: 1;
-    z-index: 2;
-  }
-
-  &__card--reverse:hover &__card-info {
-    transform: translateX(calc(var(--card-width) * -1.5));
-    border-radius: $spacing-1 0 0 $spacing-1;
   }
 }

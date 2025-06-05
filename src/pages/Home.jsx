@@ -31,8 +31,7 @@ const Home = () => {
         method: "GET",
         headers: {
           accept: "application/json",
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2ODYwMGVlMDc4YTdlNzJkNWFiYzIyMDY1YjQ5YjMzYSIsIm5iZiI6MTY3NDE5MjAyNC4xOTYsInN1YiI6IjYzY2EyNDk4MDM5OGFiMDBjYzFiMzQ0MSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.lWsHrzzR4-QycjJuQUXHubaThDvagXzmI8blvVYKzsk",
+          Authorization: `Bearer ${process.env.ACCESS_TOKEN_AUTH}`,
         },
       };
 
@@ -143,8 +142,6 @@ const Home = () => {
               },
             })
           );
-
-          console.log(tvAiringToday);
         } catch (error) {
           console.log(error.message);
         } finally {

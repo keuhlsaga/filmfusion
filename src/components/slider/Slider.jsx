@@ -105,7 +105,7 @@ const Slider = ({ data, mediaType, heading, viewAllUrl }) => {
           {mediaType === "movie" ? <BiCameraMovie /> : <GiTv />}
           {heading}
         </h2>
-        <Link to={viewAllUrl} className="slider__view-all">
+        <Link to={viewAllUrl} className="slider__view-all" draggable="false">
           View all
           <FaArrowRight className="slider__arrow-right" />
         </Link>
@@ -122,6 +122,7 @@ const Slider = ({ data, mediaType, heading, viewAllUrl }) => {
               to={`/${mediaType}/${item.id}`}
               state={{ data: item }}
               className="slider__link"
+              draggable="false"
             >
               <div
                 className="slider__card"
@@ -133,6 +134,7 @@ const Slider = ({ data, mediaType, heading, viewAllUrl }) => {
                   src={BASE_URL + FILE_SIZE.W500 + item.poster_path}
                   alt={getTitle(item)}
                   loading="lazy"
+                  draggable="false"
                 />
                 {!isMobile && (
                   <div className="slider__card-info">

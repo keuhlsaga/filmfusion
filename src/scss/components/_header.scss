@@ -2,8 +2,7 @@
 
 .header {
   display: flex;
-  flex-direction: row-reverse;
-  justify-content: start;
+  justify-content: space-between;
   align-items: center;
   gap: $spacing-3;
   width: $container;
@@ -83,10 +82,5 @@
       opacity: 1;
       visibility: visible;
     }
-  }
-
-  @media (min-width: map-get($breakpoint, medium)) {
-    flex-direction: row;
-    justify-content: space-between;
   }
 }
