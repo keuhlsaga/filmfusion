@@ -31,7 +31,7 @@ const Home = () => {
         method: "GET",
         headers: {
           accept: "application/json",
-          Authorization: `Bearer ${process.env.ACCESS_TOKEN_AUTH}`,
+          Authorization: `Bearer ${process.env.REACT_APP_ACCESS_TOKEN_AUTH}`,
         },
       };
 
