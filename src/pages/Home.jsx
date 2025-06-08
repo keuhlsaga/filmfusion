@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Header from "../components/header/Header";
 import Carousel from "../components/carousel/Carousel";
-import Searchbar from "../components/searchbar/Searchbar";
 import Slider from "../components/slider/Slider";
-import { Link, useLocation } from "react-router-dom";
-import { FaArrowRight } from "react-icons/fa";
+import Footer from "../components/footer/Footer";
 import { FaChevronUp } from "react-icons/fa6";
+import { OPTIONS } from "../utils/utils";
 
 const Home = () => {
   const [trending, setTrending] = useState(null);
@@ -21,21 +20,13 @@ const Home = () => {
     popular: null,
     topRated: null,
   });
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [scrollTopVisibility, setScrollTopVisibility] = useState(false);
   const isMobile = window.innerWidth <= 992;
 
   useEffect(() => {
     if (!localStorage.getItem("filmfusion")) {
-      const options = {
-        method: "GET",
-        headers: {
-          accept: "application/json",
-          Authorization: `Bearer ${process.env.REACT_APP_ACCESS_TOKEN_AUTH}`,
-        },
-      };
-
-      const fetchAllData = async (url) => {
+      const fetchAllData = async () => {
         try {
           const [
             trendingRes,
@@ -50,39 +41,39 @@ const Home = () => {
           ] = await Promise.all([
             fetch(
               "https://api.themoviedb.org/3/trending/all/day?language=en-US",
-              options
+              OPTIONS
             ),
             fetch(
               "https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1",
-              options
+              OPTIONS
             ),
             fetch(
               "https://api.themoviedb.org/3/movie/popular?language=en-US&page=1",
-              options
+              OPTIONS
             ),
             fetch(
               "https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1",
-              options
+              OPTIONS
             ),
             fetch(
               "https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1",
-              options
+              OPTIONS
             ),
             fetch(
               "https://api.themoviedb.org/3/tv/airing_today?language=en-US&page=1",
-              options
+              OPTIONS
             ),
             fetch(
               "https://api.themoviedb.org/3/tv/on_the_air?language=en-US&page=1",
-              options
+              OPTIONS
             ),
             fetch(
               "https://api.themoviedb.org/3/tv/popular?language=en-US&page=1",
-              options
+              OPTIONS
             ),
             fetch(
               "https://api.themoviedb.org/3/tv/top_rated?language=en-US&page=1",
-              options
+              OPTIONS
             ),
           ]);
 
@@ -145,22 +136,17 @@ const Home = () => {
         } catch (error) {
           console.log(error.message);
         } finally {
-          setIsLoading(false);
+          setLoading(false);
         }
       };
-
       fetchAllData();
     } else {
-      console.log(
-        "locale storage",
-        JSON.parse(localStorage.getItem("filmfusion"))
-      );
       setTrending(JSON.parse(localStorage.getItem("filmfusion")).trending);
 
       setMovieData(JSON.parse(localStorage.getItem("filmfusion")).movie);
 
       setTvData(JSON.parse(localStorage.getItem("filmfusion")).tv);
-      setIsLoading(false);
+      setLoading(false);
     }
 
     const scrollListener = () => {
@@ -180,7 +166,7 @@ const Home = () => {
     };
   }, []);
 
-  if (isLoading) {
+  if (loading) {
     return (
       <div className="loading">
         <h1>Loading...</h1>
@@ -193,72 +179,58 @@ const Home = () => {
       <Header />
       <main>
         <Carousel data={trending} />
-
+        <section className="content-section"></section>
         <section className="content-section">
-          {!isMobile && (
-            <div className="content-section__label-container">
-              <span className="content-section__label">MOVIES</span>
-            </div>
-          )}
-          <div className="content-section__sliders-container">
-            <Slider
-              data={movieData.nowPlaying}
-              mediaType="movie"
-              heading="Now Playing"
-              viewAllUrl="/"
-            />
-            <Slider
-              data={movieData.popular}
-              mediaType="movie"
-              heading="Popular"
-              viewAllUrl="/"
-            />
-            <Slider
-              data={movieData.topRated}
-              mediaType="movie"
-              heading="Top Rated"
-              viewAllUrl="/"
-            />
-            <Slider
-              data={movieData.upcoming}
-              mediaType="movie"
-              heading="Upcoming"
-              viewAllUrl="/"
-            />
-          </div>
+          <Slider
+            data={movieData.nowPlaying}
+            mediaType="movie"
+            heading="Now Playing Movies"
+            viewAllUrl="/"
+          />
+          <Slider
+            data={movieData.popular}
+            mediaType="movie"
+            heading="Popular Movies"
+            viewAllUrl="/"
+          />
+          <Slider
+            data={movieData.topRated}
+            mediaType="movie"
+            heading="Top Rated Movies"
+            viewAllUrl="/"
+          />
+          <Slider
+            data={movieData.upcoming}
+            mediaType="movie"
+            heading="Upcoming Movies"
+            viewAllUrl="/"
+          />
         </section>
         <section className="content-section">
-          {!isMobile && (
-            <div className="content-section__label-container">
-              <span className="content-section__label">TELEVISION SHOWS</span>
-            </div>
-          )}
-          <div className="content-section__sliders-container">
-            <Slider
-              data={tvData.airingToday}
-              mediaType="tv"
-              heading="Airing Today"
-              viewAllUrl="/"
-            />
-            <Slider
-              data={tvData.onTheAir}
-              mediaType="tv"
-              heading="On The Air"
-              viewAllUrl="/"
-            />
-            <Slider
-              data={tvData.popular}
-              mediaType="tv"
-              heading="Popular"
-              viewAllUrl="/"
-            />
-            <Slider
-              data={tvData.topRated}
-              mediaType="tv"
-              heading="Upcoming"
-              viewAllUrl="/"
-            />
-          </div>
+          <Slider
+            data={tvData.airingToday}
+            mediaType="tv"
+            heading="Airing Today Tv Shows"
+            viewAllUrl="/"
+          />
+          <Slider
+            data={tvData.onTheAir}
+            mediaType="tv"
+            heading="On The Air Tv Shows"
+            viewAllUrl="/"
+          />
+          <Slider
+            data={tvData.popular}
+            mediaType="tv"
+            heading="Popular Tv Shows"
+            viewAllUrl="/"
+          />
+          <Slider
+            data={tvData.topRated}
+            mediaType="tv"
+            heading="Top Rated Tv Shows"
+            viewAllUrl="/"
+          />
         </section>
         {scrollTopVisibility && (
           <button
@@ -272,6 +244,7 @@ const Home = () => {
           </button>
         )}
       </main>
+      <Footer />
     </>
   );
 };

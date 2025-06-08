@@ -1,13 +1,34 @@
-import React from "react";
-import { BASE_URL, FILE_SIZE } from "../../utils/utils.js";
+import React, { useEffect, useState } from "react";
+import { getImageSource, OPTIONS } from "../../utils/utils.js";
 import { movieGenres, tvGenres } from "../../utils/genres.js";
-const CarouselItem = ({ item, isActive }) => {
+import { FaPlay } from "react-icons/fa";
+const CarouselItem = ({ item, isActive, setTrailer }) => {
+  const [videos, setVideos] = useState(null);
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    setTrailer(
+      videos.results.filter((video) => video.type === "Trailer")[0].key ||
+        videos.results[0]
+    );
+  };
+
+  useEffect(() => {
+    fetch(
+      `https://api.themoviedb.org/3/${item.media_type}/${item.id}/videos?language=en-US`,
+      OPTIONS
+    )
+      .then((res) => res.json())
+      .then((res) => setVideos(res))
+      .catch((err) => console.error(err));
+  }, []);
+
   return (
     <div
       className={`carousel__item${isActive ? " carousel__item--active" : ""}`}
     >
       <img
-        src={BASE_URL + FILE_SIZE.ORIGINAL + item.backdrop_path}
+        src={getImageSource(item.backdrop_path, "original")}
         alt=""
         className="carousel__item-img"
         loading="lazy"
@@ -32,11 +53,10 @@ const CarouselItem = ({ item, isActive }) => {
           ))}
         </div>
         <p className="carousel__item-overview">{item.overview}</p>
-        <div className="carousel__item-trailer">
-          <a href="#" className="btn">
-            Watch trailer
-          </a>
-        </div>
+        <a href="#" className="carousel__item-trailer" onClick={handleClick}>
+          Watch trailer
+          <FaPlay />
+        </a>
       </div>
     </div>
   );

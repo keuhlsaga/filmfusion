@@ -1,19 +1,21 @@
 @use "../abstracts" as *;
 
 .searchbar {
-  position: absolute;
-  top: 5rem;
-  z-index: 999;
   display: flex;
   justify-content: center;
-  width: $container;
-  margin-inline: calc((100vw - $container) / 2);
+  width: calc(100% - $spacing-2 * 2);
+  height: auto;
+  position: absolute;
+  top: 6rem;
+  left: $spacing-2;
+  z-index: 9999;
 
   &__container {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 50%;
+    // width: 50%;
+    width: 100%;
     height: 3rem;
     border: 1px solid #fff;
     border-radius: $spacing-4;
@@ -54,6 +56,58 @@
 
   &__search-input:not(:placeholder-shown) + .btn--clear {
     display: block;
+  }
+
+  &__result-list {
+    width: 100%;
+    position: absolute;
+    top: calc(100% + $spacing-4);
+    z-index: 99999;
+    background: hsla(0, 0%, 0%, 75%);
+    backdrop-filter: blur(15px);
+    border-radius: $spacing-2;
+  }
+
+  &__result-list-link {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    width: 100%;
+    padding: $spacing-1 $spacing-2;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  &__result-list-img {
+    width: 5rem;
+    aspect-ratio: 3/4;
+  }
+
+  &__result-list-info {
+    align-self: start;
+  }
+
+  &__result-list-title {
+    font-size: map-get($font-size, 4);
+  }
+
+  &__result-list-genres {
+    font-size: map-get($font-size, 6);
+  }
+
+  @media (min-width: map-get($breakpoint, medium)) {
+    width: 40rem;
+    left: calc((100vw - 40rem) / 2);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
   }
 }
 

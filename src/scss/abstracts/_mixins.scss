@@ -1,3 +1,10 @@
+@use "../abstracts/colors" as *;
+
 @mixin flex-row {
   display: flex;
+}
+
+@mixin glass-effect {
+  color: $dark-glass-color;
+  backdrop-filter: blur(15px);
 }

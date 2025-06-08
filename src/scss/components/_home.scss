@@ -2,37 +2,11 @@
 
 .content-section {
   display: flex;
-  max-width: 100vw;
-
-  &__label-container {
-    writing-mode: vertical-rl;
-    text-orientation: upright;
-    padding: $spacing-4;
-    font-size: map-get($font-size, 1);
-    position: relative;
-  }
-
-  &__label {
-    position: sticky;
-    top: $spacing-6;
-    user-select: none;
-  }
-
-  &__tabs-list {
-    display: flex;
-  }
-
-  &__tabs-item {
-    padding: $spacing-4;
-  }
-
-  &__sliders-container {
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-4;
-    width: 100%;
-    padding: $spacing-4;
-  }
+  flex-direction: column;
+  gap: $spacing-4;
+  // width: $container;
+  // margin-inline: auto;
+  // width: 100%;
 }
 
 .btn--to-top {

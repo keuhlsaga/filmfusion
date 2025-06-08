@@ -1,19 +1,27 @@
 import React, { useEffect, useRef, useState } from "react";
-import { FaArrowLeft, FaBars } from "react-icons/fa";
+import { FaArrowLeft, FaBars, FaSearch } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 import Searchbar from "../searchbar/Searchbar";
+import useScrollLock from "../../utils/useScrollLock";
+import { FaX } from "react-icons/fa6";
+import { PiFilmSlateBold } from "react-icons/pi";
 
 const Header = () => {
   const [isSearching, setIsSearching] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [subMenuOpen, setSubMenuOpen] = useState(false);
   const toggleSearchbarRef = useRef(null);
+  const toggleMenuRef = useRef(null);
   const mobileMenuRef = useRef(null);
   const subMenuRef = useRef(null);
   const location = useLocation();
 
+  useScrollLock(menuOpen);
+
   const handleMenuClick = (e) => {
     e.target.setAttribute("aria-expanded", true);
     mobileMenuRef.current.classList.toggle("header__nav-list--show");
+    setMenuOpen((prev) => !prev);
   };
 
   const handleSearchClick = (e) => {
@@ -22,13 +30,23 @@ const Header = () => {
   };
 
   const handleClickOutside = (e) => {
-    if (subMenuOpen && !e.target.closest(".header__nav-item--menu")) {
+    /* if (subMenuOpen && !e.target.closest(".header__nav-item--menu")) {
       subMenuRef.current.classList.remove("header__nav-sub-list--show");
       setSubMenuOpen(false);
+    } */
+    if (
+      toggleMenuRef.current &&
+      mobileMenuRef.current &&
+      !toggleMenuRef.current.contains(e.target) &&
+      !mobileMenuRef.current.contains(e.target)
+    ) {
+      toggleMenuRef.current.setAttribute("aria-expanded", true);
+      mobileMenuRef.current.classList.toggle("header__nav-list--show");
+      setMenuOpen(false);
     }
   };
 
-  useEffect(() => {
+  /*  useEffect(() => {
     if (subMenuOpen) {
       window.addEventListener("click", handleClickOutside);
 
@@ -36,7 +54,17 @@ const Header = () => {
         window.removeEventListener("click", handleClickOutside);
       };
     }
-  }, [subMenuOpen]);
+  }, [subMenuOpen]); */
+
+  useEffect(() => {
+    if (menuOpen) {
+      window.addEventListener("click", handleClickOutside);
+    }
+
+    return () => {
+      window.removeEventListener("click", handleClickOutside);
+    };
+  }, [menuOpen]);
 
   return (
     <>
@@ -49,6 +77,7 @@ const Header = () => {
         role="banner"
       >
         <Link to="/" className="header__logo" aria-label="Home">
+          <PiFilmSlateBold />
           FilmFusion
         </Link>
         <nav className="header__nav">
@@ -57,6 +86,7 @@ const Header = () => {
             className="btn btn--menu"
             aria-expanded="false"
             onClick={handleMenuClick}
+            ref={toggleMenuRef}
           >
             <FaBars />
           </button>
@@ -64,7 +94,6 @@ const Header = () => {
             <li className="header__nav-item header__nav-item--menu-close">
               <button type="button" className="btn" onClick={handleMenuClick}>
                 <FaArrowLeft />
-                <span className="header__logo">FilmFusion</span>
               </button>
             </li>
             <li className="header__nav-item">
@@ -89,16 +118,14 @@ const Header = () => {
                 onClick={handleSearchClick}
                 ref={toggleSearchbarRef}
               >
-                Search
+                {!isSearching ? <FaSearch /> : <FaX />}
               </a>
             </li>
           </ul>
         </nav>
       </header>
 
-      {isSearching && (
-        <Searchbar isSearching={isSearching} setIsSearching={setIsSearching} />
-      )}
+      {isSearching && <Searchbar setIsSearching={setIsSearching} />}
     </>
   );
 };

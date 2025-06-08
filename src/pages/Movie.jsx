@@ -1,7 +1,9 @@
 import React, { use, useEffect, useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import Header from "../components/header/Header";
-import { BASE_URL, FILE_SIZE } from "../utils/utils";
+import { BASE_URL, FILE_SIZE, OPTIONS } from "../utils/utils";
+import { FaPlus, FaStar } from "react-icons/fa6";
+import Footer from "../components/footer/Footer";
 
 const Movie = () => {
   const [details, setDetails] = useState(null);
@@ -13,39 +15,57 @@ const Movie = () => {
     writers: [],
     cast: [],
   });
+  const [activeTabIndex, setActiveTabIndex] = useState(0);
   const id = useParams()?.id;
   const data = useLocation()?.state?.data;
 
-  useEffect(() => {
-    if (id) {
-      const options = {
-        method: "GET",
-        headers: {
-          accept: "application/json",
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2ODYwMGVlMDc4YTdlNzJkNWFiYzIyMDY1YjQ5YjMzYSIsIm5iZiI6MTY3NDE5MjAyNC4xOTYsInN1YiI6IjYzY2EyNDk4MDM5OGFiMDBjYzFiMzQ0MSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.lWsHrzzR4-QycjJuQUXHubaThDvagXzmI8blvVYKzsk",
-        },
-      };
+  const getTabClassName = (index) => {
+    let className = "content__tab";
 
-      fetch(`https://api.themoviedb.org/3/movie/${id}?language=en-US`, options)
+    if (index === activeTabIndex) {
+      className += " content__tab--active";
+    }
+
+    return className;
+  };
+
+  const handleTabClick = (e) => {
+    e.preventDefault();
+    setActiveTabIndex(Number(e.currentTarget.getAttribute("data-index")));
+  };
+
+  useEffect(() => {
+    // const fetchAllData = async () => {
+    //   try {
+    //     const [detailsRes, creditsRes, videosRes] = await Promise.all([
+
+    //     ])
+    //   } catch (error) {
+
+    //   } finally {
+    //     setLoading(false);
+    //   }
+    // }
+    if (id) {
+      fetch(`https://api.themoviedb.org/3/movie/${id}?language=en-US`, OPTIONS)
         .then((res) => res.json())
-        .then((res) => setDetails(res))
+        .then((data) => setDetails(data))
         .catch((err) => console.error(err));
 
       fetch(
         `https://api.themoviedb.org/3/movie/${id}/credits?language=en-US`,
-        options
+        OPTIONS
       )
         .then((res) => res.json())
-        .then((res) => setCredits(res))
+        .then((data) => setCredits(data))
         .catch((err) => console.error(err));
 
       fetch(
         "https://api.themoviedb.org/3/movie/822119/videos?language=en-US",
-        options
+        OPTIONS
       )
         .then((res) => res.json())
-        .then((res) => setVideos(res))
+        .then((data) => setVideos(data))
         .catch((err) => console.error(err));
     }
   }, []);
@@ -63,10 +83,8 @@ const Movie = () => {
           ),
         ],
       });
-      console.log("Videos:", videos);
     }
-    console.log("Crew details:", credits?.cast);
-  }, [details, credits]);
+  }, [details, credits, videos]);
 
   if (loading) {
     return (
@@ -88,64 +106,103 @@ const Movie = () => {
           <section className="content">
             <img
               src={`${BASE_URL}${FILE_SIZE.ORIGINAL}${details.backdrop_path}`}
-              alt={data.title || data.name}
+              alt={details.title || details.name}
               className="content__banner"
             />
-            <div className="content__container">
-              <div className="content__aside">
-                <img
-                  src={`${BASE_URL}${FILE_SIZE.ORIGINAL}${data.poster_path}`}
-                  alt={data.title || data.name}
-                  className="content__poster"
-                />
-                <div className="group">
-                  <h2>Director</h2>
-                  <p>{people.director}</p>
-                </div>
-                <div className="group">
-                  <h2>Writers</h2>
-                  <p>{people.writers.join(", ")}</p>
-                </div>
-              </div>
-              <div className="content__title">
-                <div>
-                  <div>
-                    <h1>{data.title || data.name}</h1>
-                    <div>
+            <div className="content__main-content">
+              <div className="content__header">
+                <div className="content__header-title">
+                  <div className="content__header-title-left">
+                    <h1 className="content__title">
+                      {details.title || details.name}
                       <span className="content__year">
                         {new Date(
-                          data.release_date || data.first_air_date
+                          details.release_date || details.first_air_date
                         ).getFullYear()}
                       </span>
-                      <span className="content__rating">
-                        {data.vote_average.toFixed(1)}
-                      </span>
-                    </div>
+                    </h1>
                     <div className="content_genres">
                       {details.genres.map((genre) => genre.name).join(" / ")}
-                      {console.log("details", details)}
+                    </div>
+                    <div className="content__rating">
+                      <FaStar />
+                      {details.vote_average.toFixed(1)}
                     </div>
                   </div>
-                  <div>Bookmark</div>
+                  <div className="content__header-title-bookmark">
+                    <button type="button">
+                      Add to Watchlist
+                      <FaPlus />
+                    </button>
+                  </div>
                 </div>
-                <div>
+                <div className="content__header-footer">
                   <p>
-                    Budget - <span>{details.budget}</span>
+                    Budget -
+                    <span className="content__budget">{details.budget}</span>
                   </p>
                 </div>
               </div>
+              <aside className="content__aside">
+                <img
+                  src={`${BASE_URL}${FILE_SIZE.ORIGINAL}${details.poster_path}`}
+                  alt={details.title || details.name}
+                  className="content__poster"
+                />
+                <div>
+                  <h2 className="content__aside-heading">Director</h2>
+                  <p>{people.director}</p>
+                </div>
+                <div>
+                  <h2 className="content__aside-heading">Writers</h2>
+                  <p>{people.writers.join(", ")}</p>
+                </div>
+              </aside>
               <div className="content__details">
                 <ul className="content__tabs">
-                  <li className="content__tab active">Overview</li>
-                  <li className="content__tab">Cast</li>
-                  <li className="content__tab">Videos</li>
-                  <li className="content__tab">Reviews</li>
+                  <li
+                    className={`content__tab${
+                      activeTabIndex === 0 ? " content__tab--active" : ""
+                    }`}
+                  >
+                    <a href="#" data-index="0" onClick={handleTabClick}>
+                      Overview
+                    </a>
+                  </li>
+                  <li
+                    className={`content__tab${
+                      activeTabIndex === 1 ? " content__tab--active" : ""
+                    }`}
+                  >
+                    <a href="#" data-index="1" onClick={handleTabClick}>
+                      Cast
+                    </a>
+                  </li>
+                  <li
+                    className={`content__tab${
+                      activeTabIndex === 2 ? " content__tab--active" : ""
+                    }`}
+                  >
+                    <a href="#" data-index="2" onClick={handleTabClick}>
+                      Videos
+                    </a>
+                  </li>
+                  <li
+                    className={`content__tab${
+                      activeTabIndex === 3 ? " content__tab--active" : ""
+                    }`}
+                  >
+                    <a href="#" data-index="3" onClick={handleTabClick}>
+                      Reviews
+                    </a>
+                  </li>
+                  <li className="content__tab-indicator"></li>
                 </ul>
-                <div className="content__overview">
+                <div className="content__details-container">
                   <h2>Overview</h2>
-                  <p>{details.overview}</p>
+                  <p className="content__overview">{details.overview}</p>
                 </div>
-                <div className="content__cast">
+                <div className="content__details-container">
                   <h2>Cast</h2>
                   <div className="content__cast-list">
                     {credits.cast.slice(0, 10).map((cast) => (
@@ -164,7 +221,7 @@ const Movie = () => {
                     ))}
                   </div>
                 </div>
-                <div className="content__videos">
+                <div className="content__details-container">
                   {videos.results
                     .filter((video) => video.type === "Trailer")
                     .map((video) => (
@@ -182,6 +239,7 @@ const Movie = () => {
           </section>
         )}
       </main>
+      <Footer />
     </>
   );
 };

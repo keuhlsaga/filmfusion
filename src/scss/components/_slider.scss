@@ -2,10 +2,8 @@
 
 .slider {
   --card-width: 10rem;
-  width: 100%;
   display: flex;
   flex-direction: column;
-  gap: $spacing-4;
 
   @media (min-width: map-get($breakpoint, medium)) {
     --card-width: 13.75rem;
@@ -15,6 +13,7 @@
     display: flex;
     justify-content: space-between;
     align-items: baseline;
+    padding: $spacing-3;
   }
 
   &__heading {
@@ -59,10 +58,9 @@
   &__inner {
     display: flex;
     gap: $spacing-3;
-    // padding: $spacing-3;
+    padding-left: $spacing-3;
     transition: 250ms linear;
 
-    overflow-x: auto;
     --webkit-scrollbar-width: none;
     scrollbar-width: none;
 
@@ -70,6 +68,12 @@
     scroll-behavior: smooth;
     scroll-padding: $spacing-3;
     overscroll-behavior-inline: contain;
+    pointer-events: none;
+    overflow: hidden;
+
+    & * {
+      pointer-events: auto;
+    }
   }
 
   &__link {
@@ -105,19 +109,19 @@
   }
 
   &__card-info {
+    @include glass-effect;
+
     display: flex;
     flex-direction: column;
     gap: $spacing-2;
     width: calc(var(--card-width) * 1.5);
     height: 100%;
     position: absolute;
-    top: -1px;
+    top: 0;
     left: 0;
     transform: translateX(var(--card-width));
     opacity: 0;
 
-    background-color: hsl(0, 0%, 0%, 0.8);
-    backdrop-filter: blur(15px);
     flex-grow: 1;
     padding: $spacing-4;
     border-radius: 0 $spacing-1 $spacing-1 0;
@@ -181,7 +185,7 @@
     }
 
     &--next {
-      right: -1px;
+      right: 0;
     }
 
     &--hidden {

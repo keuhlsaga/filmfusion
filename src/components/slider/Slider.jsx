@@ -8,9 +8,24 @@ import { FiTv } from "react-icons/fi";
 import { MdLocalMovies } from "react-icons/md";
 import { BiCameraMovie } from "react-icons/bi";
 import { GiTv } from "react-icons/gi";
+
+const useHasTouch = () => {
+  const [hasTouch, setHasTouch] = useState(false);
+
+  useEffect(() => {
+    const isTouchDevice =
+      "ontouchstart" in window || navigator.maxTouchPoints > 0;
+    setHasTouch(isTouchDevice);
+  }, []);
+
+  return hasTouch;
+};
+
 const Slider = ({ data, mediaType, heading, viewAllUrl }) => {
   const [index, setIndex] = useState(0);
   const [sliderCount, setSliderCount] = useState(null);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [slideNext, setSlideNext] = useState(false);
   const sliderRef = useRef(null);
   const previousButtonRef = useRef(null);
   const nextButtonRef = useRef(null);
@@ -18,6 +33,7 @@ const Slider = ({ data, mediaType, heading, viewAllUrl }) => {
   const cardWidth = sliderRef.current?.firstElementChild.offsetWidth + 12;
   const isMobile = window.innerWidth <= 992;
 
+  /* 
   const handlePreviousClick = () => {
     if (index > 0) {
       setIndex((prev) => prev - 1);
@@ -25,12 +41,46 @@ const Slider = ({ data, mediaType, heading, viewAllUrl }) => {
   };
 
   const handleNextClick = () => {
+    sliderRef.current.scrollLeft += sliderCount * cardWidth;
     if (index < slidesCount - 1) {
       setIndex((prev) => prev + 1);
     }
+  }; */
+
+  const handlePreviousClick = () => {
+    if (!isAnimating && index > 0) {
+      setIsAnimating(true);
+      setIndex((prev) => prev - 1);
+      setSlideNext(false);
+      sliderRef.current.scrollBy({
+        left: sliderCount * -cardWidth,
+      });
+    }
+  };
+
+  const handleNextClick = () => {
+    console.log(slidesCount);
+    if (!isAnimating && index < slidesCount - 1) {
+      setIsAnimating(true);
+      setIndex((prev) => prev + 1);
+      setSlideNext(true);
+      sliderRef.current.scrollBy({
+        left: sliderCount * cardWidth,
+      });
+    }
+  };
+
+  const handleWheel = (e) => {
+    if (e.deltaY !== 0) return;
+    e.preventDefault();
+  };
+
+  const handleOnScrollEnd = (e) => {
+    setIsAnimating(false);
   };
 
   const handleOnScroll = (e) => {
+    // if (isMobile) return;
     const scrollLeft = e.target.scrollLeft;
     // Check if the scroll is at the beginning
     if (
@@ -70,7 +120,16 @@ const Slider = ({ data, mediaType, heading, viewAllUrl }) => {
   };
 
   useEffect(() => {
-    sliderRef.current.scrollLeft = index * sliderCount * cardWidth;
+    // sliderRef.current.scrollLeft = index * sliderCount * cardWidth;
+    // if (slideNext) {
+    //   sliderRef.current.scrollBy({
+    //     left: sliderCount * cardWidth,
+    //   });
+    //   return;
+    // }
+    // sliderRef.current.scrollBy({
+    //   left: sliderCount * cardWidth * -1,
+    // });
   }, [index]);
 
   useEffect(() => {
@@ -81,6 +140,18 @@ const Slider = ({ data, mediaType, heading, viewAllUrl }) => {
       )
     );
   }, []);
+
+  useEffect(() => {
+    if (sliderRef.current) {
+      const element = sliderRef.current;
+      element.addEventListener("wheel", handleWheel);
+
+      return () => {
+        element.removeEventListener("wheel", handleWheel);
+      };
+    }
+    console.log("here");
+  }, [sliderRef]);
 
   const getTitle = (data) => {
     if (mediaType === "movie") {
@@ -115,6 +186,7 @@ const Slider = ({ data, mediaType, heading, viewAllUrl }) => {
           className="slider__inner"
           onScroll={handleOnScroll}
           ref={sliderRef}
+          onScrollEnd={handleOnScrollEnd}
         >
           {data.map((item) => (
             <Link
@@ -162,26 +234,24 @@ const Slider = ({ data, mediaType, heading, viewAllUrl }) => {
               </div>
             </Link>
           ))}
-          <div className="slider__controls">
-            <button
-              className="slider__btn slider__btn--prev slider__btn--hidden"
-              type="button"
-              aria-label="Previous"
-              onClick={handlePreviousClick}
-              ref={previousButtonRef}
-            >
-              <FaAngleLeft />
-            </button>
-            <button
-              className="slider__btn slider__btn--next"
-              type="button"
-              aria-label="Next"
-              onClick={handleNextClick}
-              ref={nextButtonRef}
-            >
-              <FaAngleRight />
-            </button>
-          </div>
+          <button
+            className="slider__btn slider__btn--prev slider__btn--hidden"
+            type="button"
+            aria-label="Previous"
+            onClick={handlePreviousClick}
+            ref={previousButtonRef}
+          >
+            <FaAngleLeft />
+          </button>
+          <button
+            className="slider__btn slider__btn--next"
+            type="button"
+            aria-label="Next"
+            onClick={handleNextClick}
+            ref={nextButtonRef}
+          >
+            <FaAngleRight />
+          </button>
         </div>
       </div>
     </div>

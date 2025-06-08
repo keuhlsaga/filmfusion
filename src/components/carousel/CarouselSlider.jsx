@@ -1,5 +1,5 @@
 import React, { use, useEffect, useState } from "react";
-import { BASE_URL, FILE_SIZE } from "../../utils/utils.js";
+import { getImageSource } from "../../utils/utils.js";
 
 const CarouselSlider = ({
   data,
@@ -111,7 +111,7 @@ const CarouselSlider = ({
         >
           <img
             className="carousel__slider-img"
-            src={BASE_URL + FILE_SIZE.W500 + item.poster_path}
+            src={getImageSource(item.poster_path, "w500")}
             alt={data.title}
             loading="lazy"
           />
