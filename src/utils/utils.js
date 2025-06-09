@@ -15,6 +15,10 @@ export const OPTIONS = {
 // file sizes
 // [ original, w500 ]
 export const getImageSource = (path, fileSize = "original") => {
+  if (!path) {
+    return "https://www.dummyimg.in/placeholder?text=No%20Image&font_size=40";
+  }
+
   return `https://image.tmdb.org/t/p/${fileSize}/${path}`;
 };
 

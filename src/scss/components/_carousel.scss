@@ -1,22 +1,30 @@
 @use "../abstracts" as *;
 
 .carousel {
-  position: relative;
   width: 100%;
   height: 100dvh;
+  position: relative;
   overflow: hidden;
 
   &__item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
     position: absolute;
     top: 0;
     left: 0;
     opacity: 0;
-    width: 100%;
-    height: 100%;
     transition: 500ms ease-in;
 
     &--active {
       opacity: 1;
+    }
+
+    @media (min-width: map-get($breakpoint, large)) {
+      align-items: end;
+      justify-content: start;
     }
   }
 
@@ -27,6 +35,11 @@
     filter: brightness(0.75);
     user-select: none;
 
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+
     &:first-of-type {
       opacity: 0;
       animation: fade-in 300ms ease-in forwards;
@@ -34,34 +47,23 @@
   }
 
   &__item-info {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    z-index: 10;
     display: flex;
     flex-direction: column;
     gap: $spacing-2;
-    width: 50%;
-    height: auto;
-    // padding: $spacing-4 $spacing-4 $spacing-4 calc($spacing-6 * 2);
-    padding: $spacing-4 $spacing-4 $spacing-4 clamp(1rem, -5rem + 10vw, 3rem);
+    width: min(30rem, 100%);
+    // padding: $spacing-4 $spacing-4 $spacing-4 clamp(1rem, -5rem + 10vw, 3rem);
     padding: $spacing-4;
     user-select: none;
-
-    /* background-color: hsl(0, 0%, 0%, 0.3);
-    backdrop-filter: blur(4px); */
+    margin-top: -6rem;
 
     &:first-of-type {
       opacity: 0;
       animation: fade-in 600ms ease-in forwards 300ms;
     }
 
-    @media (max-width: map-get($breakpoint, large)) {
-      width: min(30rem, 100%);
-      height: fit-content;
-      top: 40%;
-      left: 50%;
-      translate: -50% -50%;
+    @media (min-width: map-get($breakpoint, large)) {
+      width: 50%;
+      padding-left: calc((100% - $container));
     }
   }
 
@@ -82,16 +84,16 @@
     gap: $spacing-2;
 
     & span {
+      @include dark-glass-effect;
       font-size: map-get($font-size, 6);
       padding: $spacing-1 $spacing-2;
       border-radius: $spacing-1;
-      background-color: hsl(0, 0%, 100%, 0.3);
-      backdrop-filter: blur(5px);
     }
   }
 
   &__item-overview {
     line-height: 1.25;
+    max-width: 100%;
   }
 
   &__item-trailer {
@@ -115,10 +117,9 @@
     right: 0;
     bottom: 0;
     z-index: 10;
-    // width: 42.5vw;
-    width: 50%;
+    width: 42.5vw;
+    width: 100%;
     height: 12rem;
-    opacity: 0;
 
     // perspective
     $perspective: 1500px;
@@ -129,111 +130,30 @@
 
     animation: fade-in 500ms ease-in forwards 600ms;
 
-    @media (max-width: map-get($breakpoint, large)) {
-      width: 100%;
+    @media (min-width: map-get($breakpoint, large)) {
+      width: 50%;
     }
   }
 
-  // width, height, z-index, transform
-  /* &__slider-item {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    translate: -50% -50%;
-    width: 6rem;
-    height: 9rem;
-    border-radius: $spacing-1;
-    opacity: 0;
-    z-index: 10;
-    overflow: hidden;
-    cursor: pointer;
-    transition: opacity 600ms ease-in, width 300ms ease-in, height 300ms ease-in,
-      z-index 300ms ease-in, transform 300ms ease-in;
-
-    // width: 8rem;
-    // height: 11rem;
-    // z-index: 0;
-    // transform: translateZ(-750px);
-
-    &
-
-    &--active {
-      opacity: 1;
-      width: 8rem;
-      height: 11rem;
-      z-index: 20;
-
-      // z-index: 3;
-      // transform: translateZ(0);
-    }
-
-    &--prev-1 {
-      opacity: 1;
-      width: 6rem;
-      height: 9rem;
-      z-index: 19;
-      transform: translateX(-7.5rem);
-
-      // z-index: 2;
-      // transform: translateX(-8rem) translateZ(-250px);
-    }
-
-    &--prev-2 {
-      opacity: 1;
-      width: 5rem;
-      height: 7rem;
-      z-index: 18;
-      transform: translateX(-13.5rem);
-
-      // z-index: 1;
-      // transform: translateX(-16rem) translateZ(-500px);
-    }
-
-    &--next-1 {
-      opacity: 1;
-      width: 6rem;
-      height: 9rem;
-      z-index: 19;
-      transform: translateX(7.5rem);
-
-      // z-index: 2;
-      // transform: translateX(8rem) translateZ(-250px);
-    }
-
-    &--next-2 {
-      opacity: 1;
-      width: 5rem;
-      height: 7rem;
-      z-index: 18;
-      transform: translateX(13.5rem);
-
-      // z-index: 1;
-      // transform: translateX(16rem) translateZ(-500px);
-    }
-
-    &:last-of-type {
-      outline: 2px solid lime;
-    }
-  } */
-
   // perspective, translateX, translateZ
   &__slider-item {
-    $slider-item-width: 8rem;
-    $slider-item-height: 11rem;
+    --slider-item-width: 8rem;
+    --slider-item-height: 11rem;
+    // $slider-item-width:8rem;
+    // $slider-item-height:11rem;
+    // width: $slider-item-width;
+    // height: $slider-item-height;
+    width: var(--slider-item-width);
+    height: var(--slider-item-height);
     position: absolute;
     top: 50%;
     left: 50%;
     translate: -50% -50% !important;
-    width: $slider-item-width;
-    height: $slider-item-height;
     z-index: 0;
     opacity: 0;
-    // border: 2px solid white;
     border-radius: $spacing-1;
     overflow: hidden;
     cursor: pointer;
-    // transition: opacity 600ms ease-in, width 300ms ease-in, height 300ms ease-in,
-    //   z-index 300ms ease-in, transform 300ms ease-in;
 
     transform: translateZ(-750px);
     transition: 300ms linear;
@@ -247,62 +167,71 @@
     &--prev-1 {
       opacity: 1;
       z-index: 2;
-      transform: translateX(-$slider-item-width) translateZ(-250px);
+      transform: translateX(calc(var(--slider-item-width) * -1))
+        translateZ(-250px);
+      // transform: translateX(-$slider-item-width) translateZ(-250px);
     }
 
     &--prev-2 {
       opacity: 1;
       z-index: 1;
-      transform: translateX(-$slider-item-width * 2) translateZ(-500px);
+      transform: translateX(calc(var(--slider-item-width) * -2))
+        translateZ(-500px);
+      // transform: translateX(-$slider-item-width * 2) translateZ(-500px);
     }
 
     &--next-1 {
       opacity: 1;
       z-index: 2;
-      transform: translateX($slider-item-width) translateZ(-250px);
+      transform: translateX(var(--slider-item-width)) translateZ(-250px);
+      // transform: translateX($slider-item-width) translateZ(-250px);
     }
 
     &--next-2 {
       opacity: 1;
       z-index: 1;
-      transform: translateX($slider-item-width * 2) translateZ(-500px);
+      transform: translateX(calc(var(--slider-item-width) * 2))
+        translateZ(-500px);
+      // transform: translateX($slider-item-width * 2) translateZ(-500px);
     }
 
-    @media (max-width: map-get($breakpoint, small)) {
-      $slider-item-width: 7rem;
-      $slider-item-height: 10rem;
-      width: $slider-item-width;
-      height: $slider-item-height;
+    @media (max-width: map-get($breakpoint, medium)) {
+      --slider-item-width: 7rem;
+      --slider-item-height: 10rem;
+      // $slider-item-width: 7rem;
+      // $slider-item-height: 10rem;
+      // width: $slider-item-width;
+      // height: $slider-item-height;
 
-      &--active {
-        opacity: 1;
-        z-index: 3;
-        transform: translateZ(0);
-      }
+      // &--active {
+      //   opacity: 1;
+      //   z-index: 3;
+      //   transform: translateZ(0);
+      // }
 
-      &--prev-1 {
-        opacity: 1;
-        z-index: 2;
-        transform: translateX(-$slider-item-width) translateZ(-250px);
-      }
+      // &--prev-1 {
+      //   opacity: 1;
+      //   z-index: 2;
+      //   transform: translateX(-$slider-item-width) translateZ(-250px);
+      // }
 
-      &--prev-2 {
-        opacity: 0;
-        z-index: 1;
-        transform: translateX(0) translateZ(-500px);
-      }
+      // &--prev-2 {
+      //   opacity: 0;
+      //   z-index: 1;
+      //   transform: translateX(0) translateZ(-500px);
+      // }
 
-      &--next-1 {
-        opacity: 1;
-        z-index: 2;
-        transform: translateX($slider-item-width) translateZ(-250px);
-      }
+      // &--next-1 {
+      //   opacity: 1;
+      //   z-index: 2;
+      //   transform: translateX($slider-item-width) translateZ(-250px);
+      // }
 
-      &--next-2 {
-        opacity: 0;
-        z-index: 1;
-        transform: translateX(0) translateZ(-500px);
-      }
+      // &--next-2 {
+      //   opacity: 0;
+      //   z-index: 1;
+      //   transform: translateX(0) translateZ(-500px);
+      // }
     }
   }
 
@@ -374,21 +303,4 @@
     box-shadow: 0 0 10px 2px black;
     overflow: hidden;
   }
-
-  /* @keyframes modal-open {
-    0% {
-      opacity: 0;
-      transform: translateY(1rem);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  } */
 }
-
-/* @keyframes fade-in {
-  100% {
-    opacity: 1;
-  }
-} */

@@ -3,9 +3,7 @@ import { BASE_URL, FILE_SIZE } from "../../utils/utils.js";
 import { movieGenres, tvGenres } from "../../utils/genres.js";
 import { Link } from "react-router-dom";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
-import { FaAnglesLeft, FaAnglesRight, FaArrowRight } from "react-icons/fa6";
-import { FiTv } from "react-icons/fi";
-import { MdLocalMovies } from "react-icons/md";
+import { FaArrowRight } from "react-icons/fa6";
 import { BiCameraMovie } from "react-icons/bi";
 import { GiTv } from "react-icons/gi";
 
@@ -150,7 +148,6 @@ const Slider = ({ data, mediaType, heading, viewAllUrl }) => {
         element.removeEventListener("wheel", handleWheel);
       };
     }
-    console.log("here");
   }, [sliderRef]);
 
   const getTitle = (data) => {
@@ -166,7 +163,7 @@ const Slider = ({ data, mediaType, heading, viewAllUrl }) => {
       return new Date(data.release_date).getFullYear() || "Unknown year";
     }
 
-    return new Date(data.first_air_date).getFullYear() || "Unkown year";
+    return new Date(data.first_air_date).getFullYear() || "Unknown year";
   };
 
   return (

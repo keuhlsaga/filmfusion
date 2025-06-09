@@ -5,6 +5,15 @@
 }
 
 @mixin glass-effect {
-  color: $dark-glass-color;
   backdrop-filter: blur(15px);
+}
+
+@mixin dark-glass-effect {
+  @include glass-effect;
+  background-color: $dark-glass-color;
+}
+
+@mixin light-glass-effect {
+  @include glass-effect;
+  background-color: $light-glass-color;
 }

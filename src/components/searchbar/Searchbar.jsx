@@ -111,12 +111,12 @@ const Searchbar = ({ setIsSearching }) => {
                     <h3 className="searchbar__result-list-title">
                       {result.title}
                     </h3>
-                    <p>
+                    <div>
                       {getYear(result.release_date) ||
                         getYear(result.first_air_date)}{" "}
                       {result.vote_average.toFixed(1)}
-                    </p>
-                    <p className="searchbar__result-list-genres">
+                    </div>
+                    <div className="searchbar__result-list-genres">
                       {result.genre_ids
                         .map((id) => {
                           let genre = {};
@@ -130,7 +130,7 @@ const Searchbar = ({ setIsSearching }) => {
                           return genre.name;
                         })
                         .join(" / ")}
-                    </p>
+                    </div>
                   </div>
                 </Link>
               </li>

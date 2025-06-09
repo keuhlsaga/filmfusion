@@ -5,6 +5,8 @@ import Slider from "../components/slider/Slider";
 import Footer from "../components/footer/Footer";
 import { FaChevronUp } from "react-icons/fa6";
 import { OPTIONS } from "../utils/utils";
+import { BiCameraMovie } from "react-icons/bi";
+import { GiTv } from "react-icons/gi";
 
 const Home = () => {
   const [trending, setTrending] = useState(null);
@@ -181,54 +183,64 @@ const Home = () => {
         <Carousel data={trending} />
         <section className="content-section"></section>
         <section className="content-section">
+          <h2 className="content-section__heading">
+            <BiCameraMovie />
+            Movies
+            <BiCameraMovie />
+          </h2>
           <Slider
             data={movieData.nowPlaying}
             mediaType="movie"
-            heading="Now Playing Movies"
+            heading="Now Playing"
             viewAllUrl="/"
           />
           <Slider
             data={movieData.popular}
             mediaType="movie"
-            heading="Popular Movies"
+            heading="Popular"
             viewAllUrl="/"
           />
           <Slider
             data={movieData.topRated}
             mediaType="movie"
-            heading="Top Rated Movies"
+            heading="Top Rated"
             viewAllUrl="/"
           />
           <Slider
             data={movieData.upcoming}
             mediaType="movie"
-            heading="Upcoming Movies"
+            heading="Upcoming"
             viewAllUrl="/"
           />
         </section>
         <section className="content-section">
+          <h2 className="content-section__heading">
+            <GiTv />
+            Tv Shows
+            <GiTv />
+          </h2>
           <Slider
             data={tvData.airingToday}
             mediaType="tv"
-            heading="Airing Today Tv Shows"
+            heading="Airing Today"
             viewAllUrl="/"
           />
           <Slider
             data={tvData.onTheAir}
             mediaType="tv"
-            heading="On The Air Tv Shows"
+            heading="On The Air"
             viewAllUrl="/"
           />
           <Slider
             data={tvData.popular}
             mediaType="tv"
-            heading="Popular Tv Shows"
+            heading="Popular"
             viewAllUrl="/"
           />
           <Slider
             data={tvData.topRated}
             mediaType="tv"
-            heading="Top Rated Tv Shows"
+            heading="Top Rated"
             viewAllUrl="/"
           />
         </section>

@@ -9,9 +9,9 @@
   margin-inline: auto;
   padding: $spacing-2;
 
-  &--home {
+  &--floating {
+    margin-inline: calc((100% - $container) / 2);
     position: absolute;
-    top: 1rem;
     z-index: 9999;
     background-color: transparent;
   }
@@ -19,18 +19,55 @@
   &__logo {
     font-size: calc($base-font-size * 2);
     padding: $spacing-2;
+
+    @media (max-width: map-get($breakpoint, medium)) {
+      margin-left: 3.5rem;
+    }
   }
 
   &__nav {
-    .btn {
+    display: flex;
+    gap: $spacing-2;
+
+    .btn--menu {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 3rem;
+      height: 2rem;
+      position: absolute;
+      left: $spacing-2;
+      z-index: 99999999;
+
+      .bar {
+        width: 100%;
+        height: 2px;
+        background-color: white;
+        transform-origin: left;
+        transition: 300ms linear;
+      }
+
+      &[aria-expanded="true"] {
+        position: fixed;
+
+        & .bar:nth-child(1) {
+          width: 1.25rem;
+          transform: rotate(45deg);
+        }
+        & .bar:nth-child(2) {
+          margin-left: 50%;
+          width: 0;
+        }
+        & .bar:nth-child(3) {
+          width: 1.25rem;
+          transform: rotate(-45deg);
+        }
+      }
+
       @media (min-width: map-get($breakpoint, medium)) {
         display: none;
       }
     }
-  }
-
-  .btn--menu {
-    z-index: 999999;
   }
 
   &__nav-list {
@@ -38,25 +75,20 @@
     gap: $spacing-2;
 
     @media (max-width: map-get($breakpoint, medium)) {
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 1000;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      @include dark-glass-effect;
       gap: 0;
       width: 100%;
       height: 100%;
-      backdrop-filter: blur(15px);
-      transition: 300ms cubic-bezier(0.29, 0, 1, 0.5);
-      transition: 300ms ease-in-out;
-
-      scale: 0;
+      padding-top: 4rem;
+      position: fixed;
+      top: 0;
+      left: -100%;
+      z-index: 1000;
+      flex-direction: column;
+      transition: transform 300ms cubic-bezier(0.29, 0, 1, 0.5);
 
       &--show {
-        // transform: translateX(0);
-        scale: 1;
+        transform: translateX(100%);
       }
     }
   }
@@ -66,6 +98,10 @@
 
     &--menu {
       position: relative;
+    }
+
+    @media (max-width: map-get($breakpoint, medium)) {
+      padding-left: $spacing-2;
     }
   }
 
@@ -85,11 +121,11 @@
   }
 
   &__nav-sub-list {
-    opacity: 0;
-    visibility: hidden;
     position: absolute;
     top: 100%;
     right: 0;
+    opacity: 0;
+    visibility: hidden;
     transition: 250ms ease-in-out;
 
     &--show {

@@ -109,7 +109,7 @@
   }
 
   &__card-info {
-    @include glass-effect;
+    @include dark-glass-effect;
 
     display: flex;
     flex-direction: column;
@@ -141,7 +141,7 @@
   &__card-details {
     display: flex;
     gap: $spacing-2;
-    font-size: map-get($font-size, 4);
+    font-size: map-get($font-size, 6);
   }
 
   &__card-genres {
@@ -150,7 +150,7 @@
     gap: $spacing-2;
 
     & span {
-      font-size: map-get($font-size, 4);
+      font-size: map-get($font-size, 6);
       padding: $spacing-1 $spacing-2;
       border-radius: $spacing-1;
       background-color: rgba(255, 255, 255, 0.1);
