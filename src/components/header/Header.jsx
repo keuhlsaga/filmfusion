@@ -20,6 +20,14 @@ const Header = () => {
 
   const handleMenuClick = (e) => {
     setMenuOpen((prev) => !prev);
+    toggleMenuRef.current.setAttribute(
+      "aria-expanded",
+      toggleMenuRef.current.getAttribute("aria-expanded") === "true"
+        ? "false"
+        : "true"
+    );
+
+    mobileMenuRef.current.classList.toggle("header__nav-list--show");
   };
 
   const handleLinkClick = () => {
@@ -60,15 +68,13 @@ const Header = () => {
   }, [subMenuOpen]); */
 
   useEffect(() => {
-    toggleMenuRef.current.setAttribute(
-      "aria-expanded",
-      toggleMenuRef.current.getAttribute("aria-expanded") === "true"
-        ? "false"
-        : "true"
-    );
-
-    mobileMenuRef.current.classList.toggle("header__nav-list--show");
-
+    // toggleMenuRef.current.setAttribute(
+    //   "aria-expanded",
+    //   toggleMenuRef.current.getAttribute("aria-expanded") === "true"
+    //     ? "false"
+    //     : "true"
+    // );
+    // mobileMenuRef.current.classList.toggle("header__nav-list--show");
     /* if (menuOpen) {
       window.addEventListener("click", handleClickOutside);
     }
