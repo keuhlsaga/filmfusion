@@ -16,10 +16,12 @@
     top: 0;
     left: 0;
     opacity: 0;
+    z-index: 0;
     transition: 500ms ease-in;
 
     &--active {
       opacity: 1;
+      z-index: 1;
     }
 
     @media (min-width: map-get($breakpoint, large)) {
@@ -32,7 +34,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: brightness(0.75);
+    filter: brightness(0.6);
     user-select: none;
 
     position: absolute;
@@ -75,7 +77,13 @@
   &__item-details {
     display: flex;
     gap: $spacing-2;
-    font-size: map-get($font-size, 4);
+    margin-top: calc($spacing-2 * -1);
+  }
+
+  &__item-rating {
+    display: flex;
+    align-items: center;
+    gap: $spacing-1;
   }
 
   &__item-genres {
@@ -84,7 +92,7 @@
     gap: $spacing-2;
 
     & span {
-      @include dark-glass-effect;
+      @include light-glass-effect;
       font-size: map-get($font-size, 6);
       padding: $spacing-1 $spacing-2;
       border-radius: $spacing-1;

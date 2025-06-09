@@ -4,6 +4,8 @@
 
 @use "./components/app";
 
+@use "./components/loading";
+
 @use "./components/header";
 
 @use "./components/searchbar";
@@ -17,3 +19,5 @@
 @use "./components/home";
 
 @use "./components/footer";
+
+@use "./components/mediaDetails";

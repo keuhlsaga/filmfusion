@@ -1,0 +1,184 @@
+@use "../abstracts" as *;
+
+.content {
+  &__banner {
+    width: 100%;
+    height: 25vh;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  &__main-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $spacing-6;
+    width: $container;
+    margin-inline: auto;
+    padding: $spacing-4;
+    line-height: 1.5;
+  }
+
+  &__aside {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-2;
+    padding: $spacing-4;
+    background-color: white;
+    border-radius: $spacing-2;
+    color: black;
+    height: fit-content;
+  }
+
+  &__poster {
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    background: red;
+    border-radius: $spacing-2;
+  }
+
+  &__aside-heading {
+    font-size: map-get($font-size, 4);
+    font-weight: 700;
+  }
+
+  &__header {
+    grid-row: 2;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-2;
+    padding: $spacing-4;
+    background-color: white;
+    border-radius: $spacing-2;
+    color: black;
+  }
+
+  &__header-title {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-2;
+    flex-wrap: wrap;
+  }
+
+  &__header-title-left {
+    display: flex;
+    flex-direction: column;
+    // gap: $spacing-2;
+  }
+
+  &__title {
+    font-size: map-get($font-size, 1);
+    font-weight: 700;
+  }
+
+  &__year {
+    margin-left: $spacing-2;
+    font-size: map-get($font-size, 3);
+    font-weight: 500;
+  }
+
+  &__genres {
+    background: lime;
+    font-size: map-get($font-size, 1);
+    color: red;
+  }
+
+  &__rating {
+    display: flex;
+    align-items: center;
+    gap: $spacing-1;
+  }
+
+  &__header-footer {
+    border-top: 1px solid black;
+    padding-block: $spacing-4;
+  }
+
+  &__budget {
+    padding: $spacing-2;
+    margin-left: $spacing-1;
+    background-color: gray;
+    border-radius: $spacing-2;
+  }
+
+  &__details {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-2;
+    padding: $spacing-4;
+    background-color: white;
+    border-radius: $spacing-2;
+    color: black;
+  }
+
+  &__tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-2;
+    border-bottom: 1px solid black;
+    padding-bottom: $spacing-2;
+  }
+
+  &__tab {
+    &--active {
+      color: red;
+    }
+  }
+
+  &__details-container {
+  }
+
+  &__info {
+  }
+
+  &__overview {
+    max-width: 100%;
+  }
+
+  &__cast-img {
+    width: 6rem;
+    height: 9rem;
+    object-fit: cover;
+  }
+
+  @media (min-width: map-get($breakpoint, small)) and (max-width: calc(map-get($breakpoint, medium) - 1px)) {
+    &__aside {
+      flex-direction: row;
+    }
+
+    &__poster {
+      width: 15rem;
+    }
+  }
+
+  @media (min-width: map-get($breakpoint, medium)) {
+    &__banner {
+      height: 25rem;
+    }
+    &__main-content {
+      grid-template-columns: 18rem 1fr;
+      grid-template-rows: auto 1fr;
+      margin-top: -12.5rem;
+    }
+    &__aside {
+      grid-column: 1;
+      grid-row: 1 / span 2;
+    }
+    &__header {
+      grid-column: 2;
+      grid-row: 1;
+      grid-template-columns: 1fr auto;
+    }
+    &__header-title {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+    &__details {
+      grid-column: 2;
+      grid-row: 2;
+    }
+    &__poster {
+      width: 100%;
+    }
+  }
+}

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getImageSource, OPTIONS } from "../../utils/utils.js";
 import { movieGenres, tvGenres } from "../../utils/genres.js";
 import { FaPlay } from "react-icons/fa";
+import { FaStar } from "react-icons/fa6";
 const CarouselItem = ({ item, isActive, setTrailer }) => {
   const [videos, setVideos] = useState(null);
 
@@ -29,7 +30,7 @@ const CarouselItem = ({ item, isActive, setTrailer }) => {
     >
       <img
         src={getImageSource(item.backdrop_path, "original")}
-        alt=""
+        alt={item.title || item.name}
         className="carousel__item-img"
         loading="lazy"
       />
@@ -39,7 +40,10 @@ const CarouselItem = ({ item, isActive, setTrailer }) => {
           <span>
             {new Date(item.release_date || item.first_air_date).getFullYear()}
           </span>
-          <span>{item.vote_average.toFixed(1)}</span>
+          <span className="carousel__item-rating">
+            <FaStar />
+            {item.vote_average.toFixed(1)}
+          </span>
         </div>
         <div className="carousel__item-genres">
           {item.genre_ids.map((id) => (

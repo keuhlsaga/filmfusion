@@ -3,7 +3,7 @@ import { BASE_URL, FILE_SIZE } from "../../utils/utils.js";
 import { movieGenres, tvGenres } from "../../utils/genres.js";
 import { Link } from "react-router-dom";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
-import { FaArrowRight } from "react-icons/fa6";
+import { FaArrowRight, FaStar } from "react-icons/fa6";
 import { BiCameraMovie } from "react-icons/bi";
 import { GiTv } from "react-icons/gi";
 
@@ -211,6 +211,7 @@ const Slider = ({ data, mediaType, heading, viewAllUrl }) => {
                     <div className="slider__card-details">
                       <span className="slider__card-year">{getYear(item)}</span>
                       <span className="slider__card-rating">
+                        <FaStar />
                         {item.vote_average.toFixed(1)}
                       </span>
                     </div>

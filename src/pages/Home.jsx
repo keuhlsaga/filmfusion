@@ -7,6 +7,7 @@ import { FaChevronUp } from "react-icons/fa6";
 import { OPTIONS } from "../utils/utils";
 import { BiCameraMovie } from "react-icons/bi";
 import { GiTv } from "react-icons/gi";
+import Loading from "../components/loading/Loading";
 
 const Home = () => {
   const [trending, setTrending] = useState(null);
@@ -169,11 +170,7 @@ const Home = () => {
   }, []);
 
   if (loading) {
-    return (
-      <div className="loading">
-        <h1>Loading...</h1>
-      </div>
-    );
+    return <Loading />;
   }
 
   return (

@@ -1,12 +1,14 @@
 @use "../abstracts" as *;
 
 .footer {
-  display: flex;
-  //   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: $spacing-2;
   padding: $spacing-3;
   margin-top: $spacing-4;
-  text-align: center;
+
+  p {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: $spacing-2;
+    max-width: 100%;
+  }
 }
