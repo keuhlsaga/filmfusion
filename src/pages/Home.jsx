@@ -129,6 +129,7 @@ const Home = () => {
           );
         } catch (error) {
           console.error(error);
+          alert(error);
         } finally {
           setLoading(false);
         }
