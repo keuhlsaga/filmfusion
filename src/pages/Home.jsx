@@ -29,7 +29,6 @@ const Home = () => {
 
   useEffect(() => {
     if (!localStorage.getItem("filmfusion")) {
-      alert("here");
       (async () => {
         try {
           const promises = [
