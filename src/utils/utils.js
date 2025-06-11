@@ -12,6 +12,17 @@ export const OPTIONS = {
   },
 };
 
+export const apiFetch = async (url, options) => {
+  const response = await fetch(url, options);
+
+  if (!response.ok) {
+    console.log("No data found");
+    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+  }
+
+  return response.json();
+};
+
 // file sizes
 // [ original, w500 ]
 export const getImageSource = (path, fileSize = "original") => {
@@ -24,4 +35,18 @@ export const getImageSource = (path, fileSize = "original") => {
 
 export const getYear = (date) => {
   return new Date(date).getFullYear();
+};
+
+export const getRunTime = (runtime) => {
+  let time = runtime;
+  let result = [];
+
+  if (runtime >= 60) {
+    time -= Math.floor(runtime / 60) * 60;
+    result.push(`${Math.floor(runtime / 60)}h`);
+  }
+
+  result.push(`${time}m`);
+
+  return result.join(" ");
 };

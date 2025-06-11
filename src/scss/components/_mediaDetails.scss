@@ -29,12 +29,30 @@
     height: fit-content;
   }
 
+  &__poster-container {
+    position: relative;
+  }
+
   &__poster {
     width: 100%;
     aspect-ratio: 2 / 3;
     object-fit: cover;
     background: red;
     border-radius: $spacing-2;
+  }
+
+  &__rating-category {
+    // @include dark-glass-effect;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    padding-inline: $spacing-3;
+    border-radius: $spacing-2 0;
+    color: $light;
+    font-size: map-get($font-size, 3);
+
+    backdrop-filter: blur(5px);
   }
 
   &__aside-heading {

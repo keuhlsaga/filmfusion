@@ -4,6 +4,8 @@ import "../src/css/main.css";
 import Home from "./pages/Home";
 import Movie from "./pages/Movie";
 import Tv from "./pages/Tv";
+import PageNotFound from "./pages/PageNotFound";
+import Loading from "./components/loading/Loading";
 
 const App = () => {
   return (
@@ -19,7 +21,8 @@ const App = () => {
           <Route index element={<Tv />} />
           <Route path=":id" element={<Tv />} />
         </Route>
-        <Route path="*" element={<h1>404</h1>} />
+        <Route path="*" element={<PageNotFound />} />
+        <Route path="/loading" element={<Loading />} />
       </Routes>
     </Router>
   );

@@ -6,11 +6,17 @@ import useScrollLock from "../../utils/useScrollLock";
 
 const Carousel = ({ data }) => {
   const [activeCarouselIndex, setActiveCarouselIndex] = useState(0);
-  const [trailer, setTrailer] = useState(null);
+  const [trailer, setTrailer] = useState({
+    title: "",
+    video: null,
+  });
   const [modalOpen, setModalOpen] = useState(false);
   const trailerModalRef = useRef(null);
   const carouselSlideTime = 10000;
   const timeOutRef = useRef(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startClientX, setStartClientX] = useState(null);
+  const [endClientX, setEndClientX] = useState(null);
 
   useScrollLock(modalOpen);
 
@@ -32,10 +38,62 @@ const Carousel = ({ data }) => {
         "carousel__trailer-modal--close"
       );
       trailerModalRef.current.close();
-      setTrailer(null);
+      setTrailer({
+        title: "",
+        video: null,
+      });
       autoSlide();
       setModalOpen(false);
     }, 300);
+  };
+
+  const handleTouchStart = (e) => {
+    setStartClientX(e.touches[0].clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    setIsDragging(true);
+    setEndClientX(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = (e) => {
+    if (isDragging) {
+      console.log(startClientX, endClientX);
+      console.log("difference", startClientX - endClientX);
+      console.log("difference", startClientX - endClientX >= 50);
+
+      if (startClientX - endClientX >= 50) {
+        setActiveCarouselIndex((prev) => {
+          if (prev === data.length - 1) {
+            return 0;
+          }
+          return prev + 1;
+        });
+      } else if (startClientX - endClientX <= -50) {
+        setActiveCarouselIndex((prev) => {
+          if (prev === 0) {
+            return data.length - 1;
+          }
+          return prev - 1;
+        });
+      }
+    }
+    setIsDragging(false);
+    /*  if (clientX - e.touches[0].clientX >= 100) {
+      setActiveCarouselIndex((prev) => {
+        if (prev === data.length - 1) {
+          return 0;
+        }
+        return prev + 1;
+      });
+    } else {
+      setActiveCarouselIndex((prev) => {
+        if (prev === 0) {
+          return data.length - 1;
+        }
+        return prev - 1;
+      });
+    } */
   };
 
   useEffect(() => {
@@ -47,7 +105,7 @@ const Carousel = ({ data }) => {
   }, [activeCarouselIndex]);
 
   useEffect(() => {
-    if (trailer !== null) {
+    if (trailer.video !== null) {
       trailerModalRef.current.showModal();
       clearTimeout(timeOutRef.current);
       setModalOpen(true);
@@ -73,7 +131,13 @@ const Carousel = ({ data }) => {
 
   return (
     <>
-      <section className="carousel" role="slider">
+      <section
+        className="carousel"
+        role="slider"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
         {data.map((item, index) => (
           <CarouselItem
             key={item.id}
@@ -99,7 +163,9 @@ const Carousel = ({ data }) => {
             className="carousel__trailer-modal-video"
             width="420"
             height="315"
-            src={`https://www.youtube.com/embed/${trailer}`}
+            title={trailer.title}
+            src={`https://www.youtube.com/embed/${trailer.video}?autoplay=1`}
+            allowFullScreen
           ></iframe>
         </dialog>
       </section>

@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Header from "../components/header/Header";
-import { OPTIONS } from "../utils/utils";
+import { apiFetch, OPTIONS } from "../utils/utils";
 import Footer from "../components/footer/Footer";
 import Loading from "../components/loading/Loading";
 import MediaDetails from "../components/mediaDetails/MediaDetails";
+import PageNotFound from "./PageNotFound";
 
 const Movie = () => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [error404, setError404] = useState(false);
   const [details, setDetails] = useState({
     details: null,
     credits: null,
@@ -21,68 +23,73 @@ const Movie = () => {
   const id = useParams()?.id;
 
   useEffect(() => {
-    setLoading(true);
-    fetch(`https://api.themoviedb.org/3/movie/${id}?language=en-US`, OPTIONS)
-      .then((res) => res.json())
-      .then((data) =>
-        setDetails((prev) => {
-          return {
-            ...prev,
-            details: data,
-          };
-        })
-      )
-      .catch((err) => console.error(err));
+    if (id) {
+      setLoading(true);
 
-    fetch(
-      `https://api.themoviedb.org/3/movie/${id}/credits?language=en-US`,
-      OPTIONS
-    )
-      .then((res) => res.json())
-      .then((data) =>
-        setDetails((prev) => {
-          return {
+      (async () => {
+        try {
+          const movieData = await apiFetch(
+            `https://api.themoviedb.org/3/movie/${id}?language=en-US`,
+            OPTIONS
+          );
+          /* setDetails((prev) => ({
             ...prev,
-            credits: data,
-            people: {
-              director: data.crew.find((crew) => crew.job === "Director")?.name,
-              writers: [
-                ...new Set(
-                  data.crew
-                    .filter((crew) => crew.department === "Writing")
-                    .map((writer) => writer.name)
-                ),
-              ],
-            },
-          };
-        })
-      )
-      .catch((err) => console.error(err));
+            details: movieData,
+          })); */
 
-    fetch(
-      `https://api.themoviedb.org/3/movie/${id}/videos?language=en-US`,
-      OPTIONS
-    )
-      .then((res) => res.json())
-      .then((data) =>
-        setDetails((prev) => {
-          return {
-            ...prev,
-            videos: data,
-          };
-        })
-      )
-      .catch((err) => console.error(err));
-  }, []);
+          const promises = [
+            apiFetch(
+              `https://api.themoviedb.org/3/movie/${id}/credits?language=en-US`,
+              OPTIONS
+            ),
+            apiFetch(
+              `https://api.themoviedb.org/3/movie/${id}/videos?language=en-US`,
+              OPTIONS
+            ),
+            apiFetch(
+              `https://api.themoviedb.org/3/movie/${id}/release_dates`,
+              OPTIONS
+            ),
+          ];
 
-  useEffect(() => {
-    if (details.details && details.credits && details.videos) {
-      setLoading(false);
+          const [credits, videos, releaseDates] = await Promise.all(promises);
+          console.log(movieData, credits, videos);
+          setDetails((prev) => {
+            return {
+              ...prev,
+              details: Object.assign(movieData, {
+                release_dates: releaseDates.results,
+              }),
+              credits: credits,
+              videos: videos.results,
+              people: {
+                director: credits.crew.find((crew) => crew.job === "Director")
+                  ?.name,
+                writers: [
+                  ...new Set(
+                    credits.crew
+                      .filter((crew) => crew.department === "Writing")
+                      .map((writer) => writer.name)
+                  ),
+                ],
+              },
+            };
+          });
+        } catch (error) {
+          setError404(true);
+        } finally {
+          setLoading(false);
+        }
+      })();
     }
-  }, [details]);
+  }, []);
 
   if (loading) {
     return <Loading />;
+  }
+
+  if (error404) {
+    return <PageNotFound />;
   }
 
   return (
@@ -94,12 +101,14 @@ const Movie = () => {
             <input type="text" name="" id="" />
           </aside>
         ) : (
-          <MediaDetails
-            details={details.details}
-            credits={details.credits}
-            videos={details.videos}
-            people={details.people}
-          />
+          details.details && (
+            <MediaDetails
+              details={details.details}
+              credits={details.credits}
+              videos={details.videos}
+              people={details.people}
+            />
+          )
         )}
       </main>
       <Footer />

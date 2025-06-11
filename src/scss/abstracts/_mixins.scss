@@ -1,3 +1,4 @@
+@use "../abstracts/container" as *;
 @use "../abstracts/colors" as *;
 
 @mixin flex-row {
@@ -16,4 +17,20 @@
 @mixin light-glass-effect {
   @include glass-effect;
   background-color: $light-glass-color;
+}
+
+@mixin container {
+  width: $container;
+  margin-inline: auto;
+}
+
+@mixin user-select-none {
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+}
+
+@mixin user-drag-none {
+  user-drag: none;
+  -webkit-user-drag: none;
 }

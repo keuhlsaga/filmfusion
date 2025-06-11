@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { getImageSource, OPTIONS } from "../../utils/utils";
+import { getImageSource, getRunTime, OPTIONS } from "../../utils/utils";
 import { FaPlus, FaStar } from "react-icons/fa6";
 
 const MediaDetails = ({ details, credits, videos, people }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
+  const releaseDates = details.release_dates.find(
+    (result) => result.iso_3166_1 === "US"
+  ).release_dates;
+  const ratingCategory = releaseDates[releaseDates.length - 1].certification;
 
   const handleTabClick = (e) => {
     e.preventDefault();
@@ -32,9 +36,12 @@ const MediaDetails = ({ details, credits, videos, people }) => {
               <div className="content_genres">
                 {details.genres.map((genre) => genre.name).join(" / ")}
               </div>
-              <div className="content__rating">
-                <FaStar />
-                {details.vote_average.toFixed(1)}
+              <div>
+                <span>{getRunTime(details.runtime)}</span>
+                <div className="content__rating">
+                  <FaStar />
+                  {details.vote_average.toFixed(1)}
+                </div>
               </div>
             </div>
             <div className="content__header-title-bookmark">
@@ -51,11 +58,14 @@ const MediaDetails = ({ details, credits, videos, people }) => {
           </div>
         </div>
         <aside className="content__aside">
-          <img
-            src={getImageSource(details.poster_path)}
-            alt={details.title || details.name}
-            className="content__poster"
-          />
+          <div className="content__poster-container">
+            <img
+              src={getImageSource(details.poster_path)}
+              alt={details.title || details.name}
+              className="content__poster"
+            />
+            <span className="content__rating-category">{ratingCategory}</span>
+          </div>
           <div>
             <h2 className="content__aside-heading">Director</h2>
             <p>{people.director}</p>
@@ -127,7 +137,7 @@ const MediaDetails = ({ details, credits, videos, people }) => {
             </div>
           </div>
           <div className="content__details-container">
-            {videos.results
+            {videos
               .filter((video) => video.type === "Trailer")
               .map((video) => (
                 <iframe

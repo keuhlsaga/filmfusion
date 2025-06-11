@@ -7,6 +7,7 @@ const CarouselSlider = ({
   setActiveCarouselIndex,
 }) => {
   const [activeSliderIndex, setActiveSliderIndex] = useState(null);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   const slideTwice = (first, second) => {
     setActiveSliderIndex(first);
@@ -17,6 +18,10 @@ const CarouselSlider = ({
   };
 
   const handleClick = (index) => {
+    if (isAnimating) return;
+
+    setIsAnimating(true);
+
     // Slide left twice
     if (activeSliderIndex <= 1 && activeSliderIndex - index < -2) {
       if (data.length - 1 === index) {
@@ -98,6 +103,9 @@ const CarouselSlider = ({
 
   useEffect(() => {
     setActiveSliderIndex(activeCarouselIndex);
+    setTimeout(() => {
+      setIsAnimating(false);
+    }, 300);
   }, [activeCarouselIndex]);
 
   return (

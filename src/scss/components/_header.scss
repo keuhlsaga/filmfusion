@@ -1,12 +1,11 @@
 @use "../abstracts" as *;
 
 .header {
+  @include container;
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: $spacing-3;
-  width: $container;
-  margin-inline: auto;
   padding: $spacing-2;
 
   &--floating {

@@ -70,7 +70,7 @@
     position: absolute;
     top: calc(100% + $spacing-4);
     z-index: 99999;
-    overflow: auto;
+    overflow-y: auto;
     background: hsla(0, 0%, 0%, 75%);
     backdrop-filter: blur(15px);
     border-radius: $spacing-2;

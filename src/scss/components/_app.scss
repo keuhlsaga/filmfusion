@@ -7,7 +7,9 @@ html {
 body {
   font-family: $font-family;
   overscroll-behavior: none;
-  color: white;
+  color: $light;
+  min-height: 100dvh;
+  background: $gradient;
 
   &:has(dialog:open) {
     overflow: inherit;

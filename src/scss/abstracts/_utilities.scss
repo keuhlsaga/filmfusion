@@ -1,10 +1,16 @@
 .btn {
-  display: inline-block;
-  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.5rem;
   background-color: transparent;
   border: none;
   border-radius: 0.25rem;
   cursor: pointer;
+
+  &--primary {
+    background-color: blue;
+  }
 
   &:hover {
     opacity: 0.8;
