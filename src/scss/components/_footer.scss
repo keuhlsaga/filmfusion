@@ -1,7 +1,7 @@
 @use "../abstracts" as *;
 
 .footer {
-  padding: $spacing-3;
+  padding-block: $spacing-6;
   margin-top: $spacing-4;
 
   p {

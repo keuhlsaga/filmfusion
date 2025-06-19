@@ -1,0 +1,54 @@
+@use "../abstracts" as *;
+
+.card {
+  @include dark-glass-effect;
+  display: flex;
+  position: relative;
+  //   overflow: hidden;
+  width: $card-width;
+  height: $card-height;
+  aspect-ratio: 4 / 5;
+  border-radius: $spacing-2;
+  transition: 300ms ease-in-out;
+
+  &--reverse {
+    flex-direction: reverse;
+  }
+
+  @media (min-width: map-get($breakpoint, large)) {
+    &:hover {
+      z-index: 1;
+      overflow: visible;
+      border-radius: $spacing-1 0 0 $spacing-1;
+    }
+
+    &--reverse:hover {
+      border-radius: 0 $spacing-1 $spacing-1 0;
+    }
+  }
+
+  @media (hover: hover) {
+    &:hover &__img {
+      scale: 0.875;
+    }
+  }
+
+  &__img-block {
+    min-width: 100%;
+    overflow: hidden;
+    border-radius: inherit;
+  }
+
+  &__img {
+    @include user-drag-none;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+    transition: 300ms ease-in-out;
+  }
+
+  &__body {
+    opacity: 0;
+  }
+}

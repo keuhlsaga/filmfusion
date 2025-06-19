@@ -92,8 +92,19 @@ const Header = () => {
         //   ["/home", "/"].includes(location.pathname) ? " header--floating" : ""
         // }`}
         className="header header--floating"
-        role="banner"
       >
+        <button
+          type="button"
+          className="btn btn--menu"
+          aria-expanded="false"
+          aria-label="menu button"
+          onClick={handleMenuClick}
+          ref={toggleMenuRef}
+        >
+          <span className="bar"></span>
+          <span className="bar"></span>
+          <span className="bar"></span>
+        </button>
         <Link to="/" className="header__logo" aria-label="Home">
           FilmFusion
         </Link>
@@ -132,17 +143,6 @@ const Header = () => {
               </Link>
             </li>
           </ul>
-          <button
-            type="button"
-            className="btn btn--menu"
-            aria-expanded="false"
-            onClick={handleMenuClick}
-            ref={toggleMenuRef}
-          >
-            <div className="bar"></div>
-            <div className="bar"></div>
-            <div className="bar"></div>
-          </button>
           <button
             type="button"
             className="btn btn--toggle-search"

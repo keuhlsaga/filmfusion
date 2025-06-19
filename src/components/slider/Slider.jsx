@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import { BASE_URL, FILE_SIZE } from "../../utils/utils.js";
+import { BASE_URL, FILE_SIZE, getImageSource } from "../../utils/utils.js";
 import { movieGenres, tvGenres } from "../../utils/genres.js";
 import { Link } from "react-router-dom";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { FaArrowRight, FaStar } from "react-icons/fa6";
 import { BiCameraMovie } from "react-icons/bi";
 import { GiTv } from "react-icons/gi";
+import Card from "../card/Card.jsx";
 
 const useHasTouch = () => {
   const [hasTouch, setHasTouch] = useState(false);
@@ -19,7 +20,7 @@ const useHasTouch = () => {
   return hasTouch;
 };
 
-const Slider = ({ data, mediaType, heading, viewAllUrl }) => {
+const Slider = ({ data, mediaType }) => {
   const [index, setIndex] = useState(0);
   const [sliderCount, setSliderCount] = useState(null);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -30,20 +31,6 @@ const Slider = ({ data, mediaType, heading, viewAllUrl }) => {
   const slidesCount = Math.ceil(data.length / sliderCount);
   const cardWidth = sliderRef.current?.firstElementChild.offsetWidth + 12;
   const isMobile = window.innerWidth <= 992;
-
-  /* 
-  const handlePreviousClick = () => {
-    if (index > 0) {
-      setIndex((prev) => prev - 1);
-    }
-  };
-
-  const handleNextClick = () => {
-    sliderRef.current.scrollLeft += sliderCount * cardWidth;
-    if (index < slidesCount - 1) {
-      setIndex((prev) => prev + 1);
-    }
-  }; */
 
   const handlePreviousClick = () => {
     if (!isAnimating && index > 0) {
@@ -101,15 +88,22 @@ const Slider = ({ data, mediaType, heading, viewAllUrl }) => {
   };
 
   const handleMouseEnter = (e) => {
-    if (isMobile) return; // Skip animation on mobile devices
+    // if (isMobile) return; // Skip animation on mobile devices
 
     const card = e.currentTarget;
     const left = card.getBoundingClientRect().left;
     const cardInfo = card.querySelector(".slider__card-info");
-
     if (left > sliderRef.current.clientWidth / 2) {
       card.classList.add("slider__card--reverse");
     }
+
+    /* const card = e.target.closest(".card");
+    const left = card.getBoundingClientRect().left;
+    console.log(left);
+    const cardDescription = card.querySelector(".card__body");
+    if (left > sliderRef.current.clientWidth / 2) {
+      card.classList.add(".card--reverse");
+    } */
   };
 
   const handleMouseLeave = (e) => {
@@ -168,31 +162,23 @@ const Slider = ({ data, mediaType, heading, viewAllUrl }) => {
 
   return (
     <div className="slider">
-      <div className="slider__header">
-        <h2 className="slider__heading">
-          {mediaType === "movie" ? <BiCameraMovie /> : <GiTv />}
-          {heading}
-        </h2>
-        <Link to={viewAllUrl} className="slider__view-all" draggable="false">
-          View all
-          <FaArrowRight className="slider__arrow-right" />
-        </Link>
-      </div>
       <div className="slider__body">
         <div
           className="slider__inner"
-          onScroll={handleOnScroll}
           ref={sliderRef}
+          onScroll={handleOnScroll}
           onScrollEnd={handleOnScrollEnd}
         >
           {data.map((item) => (
             <Link
               key={item.id}
               to={`/${mediaType}/${item.id}`}
-              state={{ data: item }}
               className="slider__link"
               draggable="false"
+              // onMouseEnter={handleMouseEnter}
+              // onMouseLeave={handleMouseLeave}
             >
+              {/* <Card data={item} /> */}
               <div
                 className="slider__card"
                 onMouseEnter={handleMouseEnter}
@@ -200,35 +186,35 @@ const Slider = ({ data, mediaType, heading, viewAllUrl }) => {
               >
                 <img
                   className="slider__card-img"
-                  src={BASE_URL + FILE_SIZE.W500 + item.poster_path}
+                  src={getImageSource(item.poster_path, "w500")}
                   alt={getTitle(item)}
                   loading="lazy"
                   draggable="false"
                 />
-                {!isMobile && (
-                  <div className="slider__card-info">
-                    <h3 className="slider__card-title">{getTitle(item)}</h3>
-                    <div className="slider__card-details">
-                      <span className="slider__card-year">{getYear(item)}</span>
-                      <span className="slider__card-rating">
-                        <FaStar />
-                        {item.vote_average.toFixed(1)}
-                      </span>
-                    </div>
-                    <div className="slider__card-genres">
-                      {item.genre_ids.map((id) => (
-                        <span key={id}>
-                          {mediaType === "movie"
-                            ? movieGenres.find((genre) => genre.id === id)
-                                ?.name || "Unknown Genre"
-                            : tvGenres.find((genre) => genre.id === id)?.name ||
-                              "Unknown Genre"}
-                        </span>
-                      ))}
-                    </div>
-                    <p className="slider__card-overview">{item.overview}</p>
+                {/* {!isMobile && ( */}
+                <div className="slider__card-info">
+                  <h3 className="slider__card-title">{getTitle(item)}</h3>
+                  <div className="slider__card-details">
+                    <span className="slider__card-year">{getYear(item)}</span>
+                    <span className="slider__card-rating">
+                      <FaStar />
+                      {item.vote_average.toFixed(1)}
+                    </span>
                   </div>
-                )}
+                  <div className="slider__card-genres">
+                    {item.genre_ids.map((id) => (
+                      <span key={id}>
+                        {mediaType === "movie"
+                          ? movieGenres.find((genre) => genre.id === id)
+                              ?.name || "Unknown Genre"
+                          : tvGenres.find((genre) => genre.id === id)?.name ||
+                            "Unknown Genre"}
+                      </span>
+                    ))}
+                  </div>
+                  <p className="slider__card-overview">{item.overview}</p>
+                </div>
+                {/* )} */}
               </div>
             </Link>
           ))}

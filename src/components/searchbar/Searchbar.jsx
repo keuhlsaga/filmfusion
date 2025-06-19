@@ -88,6 +88,7 @@ const Searchbar = ({ setIsSearching }) => {
             aria-label="Search"
             onChange={handleChange}
             ref={searchInputRef}
+            autoFocus
           />
           <button
             className="btn btn--clear"

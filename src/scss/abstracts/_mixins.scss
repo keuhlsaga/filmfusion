@@ -1,8 +1,11 @@
-@use "../abstracts/container" as *;
-@use "../abstracts/colors" as *;
+@use "./container" as *;
+@use "./colors" as *;
+@use "./spacing" as *;
 
-@mixin flex-row {
+@mixin flex-group {
   display: flex;
+  align-items: center;
+  gap: $spacing-2;
 }
 
 @mixin glass-effect {

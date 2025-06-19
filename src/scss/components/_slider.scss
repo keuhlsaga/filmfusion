@@ -28,37 +28,10 @@
     position: relative;
   }
 
-  &__view-all {
-    display: flex;
-    align-items: center;
-    gap: $spacing-2;
-
-    @media (min-width: map-get($breakpoint, large)) {
-      &:hover {
-        opacity: 0.8;
-      }
-    }
-  }
-  @media (min-width: map-get($breakpoint, large)) {
-    &__view-all:hover &__arrow-right {
-      animation: arrowRight 1000ms ease infinite;
-    }
-  }
-
-  @keyframes arrowRight {
-    0%,
-    100% {
-      transform: translateX(0);
-    }
-    50% {
-      transform: translateX(5px);
-    }
-  }
-
   &__inner {
     display: flex;
     gap: $spacing-3;
-    padding-left: $spacing-3;
+    padding: $spacing-3;
     transition: 250ms linear;
 
     --webkit-scrollbar-width: none;
@@ -77,34 +50,23 @@
   }
 
   &__link {
-    flex: 0 0 var(--card-width);
+    // flex: 0 0 var(--card-width);
     scroll-snap-align: start;
   }
 
   &__card {
     display: flex;
-    border-radius: $spacing-1;
     position: relative;
+    width: var(--card-width);
+    border-radius: $spacing-2;
     overflow: hidden;
     background-color: hsl(0, 0%, 0%, 0.8);
-
-    @media (min-width: map-get($breakpoint, large)) {
-      &:hover {
-        z-index: 1;
-        overflow: visible;
-        border-radius: $spacing-1 0 0 $spacing-1;
-      }
-
-      &--reverse:hover {
-        border-radius: 0 $spacing-1 $spacing-1 0;
-      }
-    }
   }
 
   &__card-img {
     object-fit: cover;
     aspect-ratio: 6 / 9;
-    border-radius: $spacing-1;
+    border-radius: $spacing-2;
     transition: 250ms ease-in-out;
   }
 
@@ -113,7 +75,7 @@
 
     display: flex;
     flex-direction: column;
-    gap: $spacing-1;
+    // gap: $spacing-1;
     width: calc(var(--card-width) * 1.5);
     height: 100%;
     position: absolute;
@@ -124,19 +86,24 @@
 
     flex-grow: 1;
     padding: $spacing-4;
-    border-radius: 0 $spacing-1 $spacing-1 0;
+    border-radius: 0 $spacing-2 $spacing-2 0;
 
     transition: opacity 250ms ease-in;
 
-    @media (min-width: map-get($breakpoint, large)) {
+    @media (min-width: map-get($breakpoint, small)) {
+      gap: $spacing-1;
     }
   }
 
   &__card-title {
-    font-size: map-get($font-size, 2);
+    font-size: map-get($font-size, 4);
     font-weight: 500;
     margin-bottom: $spacing-1;
     line-height: 1;
+
+    @media (min-width: map-get($breakpoint, medium)) {
+      font-size: map-get($font-size, 2);
+    }
   }
 
   &__card-details {
@@ -172,15 +139,20 @@
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 6; // Limit lines
+    line-clamp: 2;
+    -webkit-line-clamp: 2; // Limit lines
     -webkit-box-orient: vertical;
+
+    @media (min-width: map-get($breakpoint, medium)) {
+      line-clamp: 6;
+      -webkit-line-clamp: 6; // Limit to 7 lines
+    }
   }
 
   &__btn {
     position: absolute;
-    // top: $spacing-3;
-    // height: calc(100% - $spacing-3 * 2);
-    height: 100%;
+    top: $spacing-3;
+    height: calc(100% - $spacing-3 * 2);
     padding-inline: $spacing-3;
     background-color: transparent;
     border: none;
@@ -200,15 +172,24 @@
       // display: none;
     }
 
-    @media (min-width: map-get($breakpoint, large)) {
+    /* @media (min-width: map-get($breakpoint, large)) {
       &:hover {
         background-color: hsl(0, 0%, 0%, 0.5);
         backdrop-filter: blur(10px);
       }
-    }
+    } */
   }
 
-  @media (min-width: map-get($breakpoint, large)) {
+  @media (hover: hover) {
+    &__card:hover {
+      z-index: 1;
+      overflow: visible;
+      border-radius: $spacing-2 0 0 $spacing-2;
+    }
+
+    &__card--reverse:hover {
+      border-radius: 0 $spacing-2 $spacing-2 0;
+    }
     &__card:hover &__card-img {
       scale: 0.9;
     }
@@ -221,6 +202,11 @@
     &__card--reverse:hover &__card-info {
       transform: translateX(calc(var(--card-width) * -1.5));
       border-radius: $spacing-1 0 0 $spacing-1;
+    }
+
+    &__btn:hover {
+      background-color: hsl(0, 0%, 0%, 0.5);
+      backdrop-filter: blur(10px);
     }
   }
 

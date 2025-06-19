@@ -6,22 +6,66 @@
   flex-direction: column;
   gap: $spacing-4;
 
-  &__heading {
+  &__header {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
     gap: $spacing-2;
-    margin-top: $spacing-6;
+    padding: $spacing-4 $spacing-4 0 $spacing-4;
+  }
+
+  &__heading {
     font-size: map-get($font-size, 1);
+  }
+
+  &__view-all {
+    @include flex-group;
+
+    @media (hover: hover) {
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  }
+
+  @media (hover: hover) {
+    &__view-all:hover &__view-all-post {
+      animation: left-right 500ms ease infinite alternate;
+    }
+  }
+
+  @keyframes left-right {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(5px);
+    }
   }
 }
 
 .btn--to-top {
   position: fixed;
-  bottom: 4rem;
-  right: 3rem;
+  bottom: $spacing-2;
+  right: $spacing-1;
   z-index: 10;
   padding: $spacing-4;
   font-size: map-get($font-size, 3);
   cursor: pointer;
+}
+
+.skeleton {
+  background: $gradient;
+  background-size: 500% 100%;
+  animation: shine 1s linear infinite alternate;
+}
+
+@keyframes shine {
+  0% {
+    background-position: 0% 100%;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
 }

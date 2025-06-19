@@ -1,9 +1,3 @@
-export const BASE_URL = "https://image.tmdb.org/t/p/";
-export const FILE_SIZE = {
-  ORIGINAL: "original",
-  W500: "w500",
-};
-
 export const OPTIONS = {
   method: "GET",
   headers: {
@@ -25,6 +19,27 @@ export const apiFetch = async (url, options) => {
 
 // file sizes
 // [ original, w500 ]
+/* "backdrop_sizes": [
+  "w300",
+  "w780",
+  "w1280",
+  "original"
+], 
+"poster_sizes": [
+  "w92",
+  "w154",
+  "w185",
+  "w342",
+  "w500",
+  "w780",
+  "original"
+],
+"profile_sizes": [
+  "w45",
+  "w185",
+  "h632",
+  "original"
+],*/
 export const getImageSource = (path, fileSize = "original") => {
   if (!path) {
     return "https://www.dummyimg.in/placeholder?text=No%20Image&font_size=40";
@@ -50,3 +65,5 @@ export const getRunTime = (runtime) => {
 
   return result.join(" ");
 };
+
+export const IS_MOBILE = window.innerWidth <= 992;

@@ -10,6 +10,7 @@ import { movieGenres, tvGenres } from "../../utils/genres.js";
 import { CODES } from "../../utils/translations.js";
 import { FaPlay } from "react-icons/fa";
 import { FaStar } from "react-icons/fa6";
+import { imageSizes } from "../../utils/imageSizes.js";
 const CarouselItem = ({ item, isActive, setTrailer }) => {
   const [videos, setVideos] = useState(null);
   const [runtime, setRuntime] = useState(null);
@@ -17,16 +18,25 @@ const CarouselItem = ({ item, isActive, setTrailer }) => {
 
   const handleClick = (e) => {
     e.preventDefault();
-    setTrailer({
-      title: item.title || item.name,
-      video:
-        videos.results.filter((video) => video.type === "Trailer")[0].key ||
-        videos.results[0],
-    });
+    // TODO use this on final
+    // setTrailer({
+    //   title: item.title || item.name,
+    //   video:
+    //     videos.results.filter((video) => video.type === "Trailer")[0].key ||
+    //     videos.results[0],
+    // });
+
+    // Mock data
+    setTrailer({ title: "The Amateur", video: "DCWcK4c-F8Q" });
   };
 
   useEffect(() => {
-    (async () => {
+    // Mock data
+    setRuntime(100);
+    setRatingCategory("R");
+
+    // TODO use this on final
+    /* (async () => {
       try {
         const promises = [
           apiFetch(
@@ -63,7 +73,7 @@ const CarouselItem = ({ item, isActive, setTrailer }) => {
           );
           let certification;
 
-          if (releaseDates.release_dates) {
+          if (releaseDates?.release_dates) {
             certification =
               releaseDates.release_dates[releaseDates.release_dates.length - 1]
                 .certification;
@@ -76,7 +86,7 @@ const CarouselItem = ({ item, isActive, setTrailer }) => {
       } catch (error) {
         console.error(error);
       }
-    })();
+    })(); */
   }, []);
 
   return (
@@ -84,7 +94,7 @@ const CarouselItem = ({ item, isActive, setTrailer }) => {
       className={`carousel__item${isActive ? " carousel__item--active" : ""}`}
     >
       <img
-        src={getImageSource(item.backdrop_path, "original")}
+        src={getImageSource(item.backdrop_path, imageSizes.backdrop.l)}
         alt={item.title || item.name}
         className="carousel__item-img"
         loading="lazy"
@@ -100,34 +110,25 @@ const CarouselItem = ({ item, isActive, setTrailer }) => {
               •
             </>
           )}
-          <span>
+          {/* <span>
             {item.media_type
               .slice(0, 1)
               .toUpperCase()
               .concat(item.media_type.slice(1))}
           </span>
-          •
-          <span>
-            {new Date(item.release_date || item.first_air_date).getFullYear()}
-          </span>
+          • */}
+          <span>{item.release_date}</span>
           {runtime && (
             <>
               •<span>{getRunTime(runtime)}</span>
             </>
           )}
-          {/* <span className="carousel__item-rating">
-            <FaStar />
-            {item.vote_average.toFixed(1)} / 10
-          </span>} */}
         </div>
         <div className="carousel__item-genres">
           {item.genre_ids.map((id) => (
             <span key={id}>
-              {item.media_type === "movie"
-                ? movieGenres.find((genre) => genre.id === id)?.name ||
-                  "Unknown Genre"
-                : tvGenres.find((genre) => genre.id === id)?.name ||
-                  "Unknown Genre"}
+              {movieGenres.find((genre) => genre.id === id)?.name ||
+                "Unknown Genre"}
             </span>
           ))}
         </div>
@@ -142,7 +143,7 @@ const CarouselItem = ({ item, isActive, setTrailer }) => {
             <FaPlay />
           </button>
           <Link
-            to={`/${item.media_type}/${item.id}`}
+            to={`/movie/${item.id}`}
             className="carousel__item-view-details"
           >
             View details

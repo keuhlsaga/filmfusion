@@ -1,0 +1,22 @@
+@use "../abstracts" as *;
+
+.pagination {
+  @include flex-group;
+  flex-wrap: wrap;
+  gap: $spacing-1;
+
+  &__pages {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-1;
+  }
+
+  .btn {
+    background-color: $dark;
+    width: 1.5rem;
+  }
+
+  .btn--active {
+    background-color: $accent;
+  }
+}

@@ -14,11 +14,15 @@
 
 @use "./components/carousel";
 
+@use "./components/pagination";
+
+@use "./components/card";
 @use "./components/slider";
 
 @use "./components/movies";
 
 @use "./components/home";
+@use "./components/trending";
 
 @use "./components/footer";
 

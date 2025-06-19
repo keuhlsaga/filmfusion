@@ -58,10 +58,6 @@ const Carousel = ({ data }) => {
 
   const handleTouchEnd = (e) => {
     if (isDragging) {
-      console.log(startClientX, endClientX);
-      console.log("difference", startClientX - endClientX);
-      console.log("difference", startClientX - endClientX >= 50);
-
       if (startClientX - endClientX >= 50) {
         setActiveCarouselIndex((prev) => {
           if (prev === data.length - 1) {
@@ -79,21 +75,6 @@ const Carousel = ({ data }) => {
       }
     }
     setIsDragging(false);
-    /*  if (clientX - e.touches[0].clientX >= 100) {
-      setActiveCarouselIndex((prev) => {
-        if (prev === data.length - 1) {
-          return 0;
-        }
-        return prev + 1;
-      });
-    } else {
-      setActiveCarouselIndex((prev) => {
-        if (prev === 0) {
-          return data.length - 1;
-        }
-        return prev - 1;
-      });
-    } */
   };
 
   useEffect(() => {
@@ -110,6 +91,7 @@ const Carousel = ({ data }) => {
       clearTimeout(timeOutRef.current);
       setModalOpen(true);
     }
+    console.log(trailer);
   }, [trailer]);
 
   useEffect(() => {
@@ -133,7 +115,6 @@ const Carousel = ({ data }) => {
     <>
       <section
         className="carousel"
-        role="slider"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}

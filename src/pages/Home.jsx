@@ -1,256 +1,136 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Header from "../components/header/Header";
 import Carousel from "../components/carousel/Carousel";
 import Slider from "../components/slider/Slider";
 import Footer from "../components/footer/Footer";
-import { FaChevronUp } from "react-icons/fa6";
-import { apiFetch, OPTIONS } from "../utils/utils";
-import { BiCameraMovie } from "react-icons/bi";
-import { GiTv } from "react-icons/gi";
+import { FaArrowRight, FaChevronUp } from "react-icons/fa6";
+import { apiFetch, getImageSource, OPTIONS } from "../utils/utils";
 import Loading from "../components/loading/Loading";
+import { Link } from "react-router-dom";
+import Pagination from "../components/pagination/Pagination";
+import { imageSizes } from "../utils/imageSizes";
+import Trending from "../components/trending/Trending";
 
 const Home = () => {
   const [trending, setTrending] = useState(null);
-  const [movieData, setMovieData] = useState({
-    nowPlaying: null,
-    popular: null,
-    topRated: null,
-    upcoming: null,
+  const [featuring, setFeaturing] = useState(null);
+  const [popular, setPopular] = useState({
+    movie: null,
+    tv: null,
   });
-  const [tvData, setTvData] = useState({
-    airingToday: null,
-    onTheAir: null,
-    popular: null,
-    topRated: null,
-  });
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [scrollTopVisibility, setScrollTopVisibility] = useState(false);
   const isMobile = window.innerWidth <= 992;
 
+  const fetchData = async () => {
+    try {
+      const promises = [
+        apiFetch(
+          "https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1",
+          OPTIONS
+        ),
+        apiFetch(
+          "https://api.themoviedb.org/3/trending/all/day?language=en-US",
+          OPTIONS
+        ),
+        apiFetch(
+          "https://api.themoviedb.org/3/movie/popular?language=en-US&page=1",
+          OPTIONS
+        ),
+        apiFetch(
+          "https://api.themoviedb.org/3/tv/popular?language=en-US&page=1",
+          OPTIONS
+        ),
+      ];
+
+      const [featuring, trending, popularMovie, popularTv] = await Promise.all(
+        promises
+      );
+
+      setFeaturing(featuring.results);
+      setTrending(trending.results);
+      setPopular({
+        movie: popularMovie.results,
+        tv: popularTv.results,
+      });
+
+      localStorage.setItem(
+        "filmfusion",
+        JSON.stringify({
+          featuring: featuring.results,
+          trending: trending.results,
+          popular: {
+            movie: popularMovie.results,
+            tv: popularTv.results,
+          },
+        })
+      );
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    if (!localStorage.getItem("filmfusion")) {
-      (async () => {
-        try {
-          const promises = [
-            apiFetch(
-              "https://api.themoviedb.org/3/trending/all/day?language=en-US",
-              OPTIONS
-            ),
-            apiFetch(
-              "https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1",
-              OPTIONS
-            ),
-            apiFetch(
-              "https://api.themoviedb.org/3/movie/popular?language=en-US&page=1",
-              OPTIONS
-            ),
-            apiFetch(
-              "https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1",
-              OPTIONS
-            ),
-            apiFetch(
-              "https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1",
-              OPTIONS
-            ),
-            apiFetch(
-              "https://api.themoviedb.org/3/tv/airing_today?language=en-US&page=1",
-              OPTIONS
-            ),
-            apiFetch(
-              "https://api.themoviedb.org/3/tv/on_the_air?language=en-US&page=1",
-              OPTIONS
-            ),
-            apiFetch(
-              "https://api.themoviedb.org/3/tv/popular?language=en-US&page=1",
-              OPTIONS
-            ),
-            apiFetch(
-              "https://api.themoviedb.org/3/tv/top_rated?language=en-US&page=1",
-              OPTIONS
-            ),
-          ];
+    // if (!localStorage.getItem("filmfusion")) {
+    setLoading(true);
+    if (true) {
+      setTimeout(() => {
+        fetchData();
+        /*  (async () => {
+          try {
+            const promises = [
+              apiFetch(
+                "https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1",
+                OPTIONS
+              ),
+              apiFetch(
+                "https://api.themoviedb.org/3/trending/all/day?language=en-US",
+                OPTIONS
+              ),
+              apiFetch(
+                "https://api.themoviedb.org/3/movie/popular?language=en-US&page=1",
+                OPTIONS
+              ),
+              apiFetch(
+                "https://api.themoviedb.org/3/tv/popular?language=en-US&page=1",
+                OPTIONS
+              ),
+            ];
 
-          // const [trendingData] = await Promise.all([
-          //   apiFetch(
-          //     "https://api.themoviedb.org/3/trending/all/day?language=en-US",
-          //     OPTIONS
-          //   ),
-          // ]);
+            const [featuring, trending, popularMovie, popularTv] =
+              await Promise.all(promises);
 
-          // console.log(trendingData);
-          // setTrending(trendingData.results);
+            setFeaturing(featuring.results);
+            setTrending(trending.results);
+            setPopular({
+              movie: popularMovie.results,
+              tv: popularTv.results,
+            });
 
-          const [
-            trending,
-            movieNowPlaying,
-            moviePopular,
-            movieTopRated,
-            movieUpcoming,
-            tvAiringToday,
-            tvOnTheAir,
-            tvPopular,
-            tvTopRated,
-          ] = await Promise.all(promises);
-
-          setTrending(trending.results);
-
-          setMovieData({
-            nowPlaying: movieNowPlaying.results,
-            popular: moviePopular.results,
-            topRated: movieTopRated.results,
-            upcoming: movieUpcoming.results,
-          });
-
-          setTvData({
-            airingToday: tvAiringToday.results,
-            onTheAir: tvOnTheAir.results,
-            popular: tvPopular.results,
-            topRated: tvTopRated.results,
-          });
-
-          localStorage.setItem(
-            "filmfusion",
-            JSON.stringify({
-              trending: trending.results,
-              movie: {
-                nowPlaying: movieNowPlaying.results,
-                popular: moviePopular.results,
-                topRated: movieTopRated.results,
-                upcoming: movieUpcoming.results,
-              },
-              tv: {
-                airingToday: tvAiringToday.results,
-                onTheAir: tvOnTheAir.results,
-                popular: tvPopular.results,
-                topRated: tvTopRated.results,
-              },
-            })
-          );
-        } catch (error) {
-          console.error(error);
-          alert(error);
-        } finally {
-          setLoading(false);
-        }
-      })();
-      /* const fetchAllData = async () => {
-        try {
-          const [
-            trendingRes,
-            movieNowPlayingRes,
-            moviePopularRes,
-            movieTopRatedRes,
-            movieUpcomingRes,
-            tvAiringTodayRes,
-            tvOnTheAirRes,
-            tvPopularRes,
-            tvTopRatedRes,
-          ] = await Promise.all([
-            fetch(
-              "https://api.themoviedb.org/3/trending/all/day?language=en-US",
-              OPTIONS
-            ),
-            fetch(
-              "https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1",
-              OPTIONS
-            ),
-            fetch(
-              "https://api.themoviedb.org/3/movie/popular?language=en-US&page=1",
-              OPTIONS
-            ),
-            fetch(
-              "https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1",
-              OPTIONS
-            ),
-            fetch(
-              "https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1",
-              OPTIONS
-            ),
-            fetch(
-              "https://api.themoviedb.org/3/tv/airing_today?language=en-US&page=1",
-              OPTIONS
-            ),
-            fetch(
-              "https://api.themoviedb.org/3/tv/on_the_air?language=en-US&page=1",
-              OPTIONS
-            ),
-            fetch(
-              "https://api.themoviedb.org/3/tv/popular?language=en-US&page=1",
-              OPTIONS
-            ),
-            fetch(
-              "https://api.themoviedb.org/3/tv/top_rated?language=en-US&page=1",
-              OPTIONS
-            ),
-          ]);
-
-          const [
-            trending,
-            movieNowPlaying,
-            moviePopular,
-            movieTopRated,
-            movieUpcoming,
-            tvAiringToday,
-            tvOnTheAir,
-            tvPopular,
-            tvTopRated,
-          ] = await Promise.all([
-            trendingRes.json(),
-            movieNowPlayingRes.json(),
-            moviePopularRes.json(),
-            movieTopRatedRes.json(),
-            movieUpcomingRes.json(),
-            tvAiringTodayRes.json(),
-            tvOnTheAirRes.json(),
-            tvPopularRes.json(),
-            tvTopRatedRes.json(),
-          ]);
-
-          setTrending(trending.results);
-
-          setMovieData({
-            nowPlaying: movieNowPlaying.results,
-            popular: moviePopular.results,
-            topRated: movieTopRated.results,
-            upcoming: movieUpcoming.results,
-          });
-
-          setTvData({
-            airingToday: tvAiringToday.results,
-            onTheAir: tvOnTheAir.results,
-            popular: tvPopular.results,
-            topRated: tvTopRated.results,
-          });
-
-          localStorage.setItem(
-            "filmfusion",
-            JSON.stringify({
-              trending: trending.results,
-              movie: {
-                nowPlaying: movieNowPlaying.results,
-                popular: moviePopular.results,
-                topRated: movieTopRated.results,
-                upcoming: movieUpcoming.results,
-              },
-              tv: {
-                airingToday: tvAiringToday.results,
-                onTheAir: tvOnTheAir.results,
-                popular: tvPopular.results,
-                topRated: tvTopRated.results,
-              },
-            })
-          );
-        } catch (error) {
-          console.log(error.message);
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchAllData(); */
+            localStorage.setItem(
+              "filmfusion",
+              JSON.stringify({
+                featuring: featuring.results,
+                trending: trending.results,
+                popular: {
+                  movie: popularMovie.results,
+                  tv: popularTv.results,
+                },
+              })
+            );
+          } catch (error) {
+            console.error(error);
+          } finally {
+            setLoading(false);
+          }
+        })(); */
+      }, 10);
     } else {
+      setFeaturing(JSON.parse(localStorage.getItem("filmfusion")).featuring);
       setTrending(JSON.parse(localStorage.getItem("filmfusion")).trending);
-      setMovieData(JSON.parse(localStorage.getItem("filmfusion")).movie);
-      setTvData(JSON.parse(localStorage.getItem("filmfusion")).tv);
+      setPopular(JSON.parse(localStorage.getItem("filmfusion")).popular);
       setLoading(false);
     }
 
@@ -271,6 +151,11 @@ const Home = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (featuring) {
+    }
+  }, [featuring]);
+
   if (loading) {
     return <Loading />;
   }
@@ -279,83 +164,51 @@ const Home = () => {
     <>
       <Header />
       <main>
-        {trending && <Carousel data={trending} />}
+        {featuring && <Carousel data={featuring.slice(0, 8)} />}
+
         <section className="content-section">
-          <h2 className="content-section__heading">
-            <BiCameraMovie />
-            Movies
-            <BiCameraMovie />
-          </h2>
-          {movieData.nowPlaying &&
-            movieData.popular &&
-            movieData.topRated &&
-            movieData.upcoming && (
-              <>
-                <Slider
-                  data={movieData.nowPlaying}
-                  mediaType="movie"
-                  heading="Now Playing"
-                  viewAllUrl="/"
-                />
-                <Slider
-                  data={movieData.popular}
-                  mediaType="movie"
-                  heading="Popular"
-                  viewAllUrl="/"
-                />
-                <Slider
-                  data={movieData.topRated}
-                  mediaType="movie"
-                  heading="Top Rated"
-                  viewAllUrl="/"
-                />
-                <Slider
-                  data={movieData.upcoming}
-                  mediaType="movie"
-                  heading="Upcoming"
-                  viewAllUrl="/"
-                />
-              </>
-            )}
+          <div className="content-section__header">
+            <h2 className="content-section__heading">Trending Today</h2>
+          </div>
+          {trending && (
+            <Trending data={trending} pageCount={trending.length / 4} />
+          )}
         </section>
         <section className="content-section">
-          <h2 className="content-section__heading">
-            <GiTv />
-            Tv Shows
-            <GiTv />
-          </h2>
-
-          {tvData.airingToday &&
-            tvData.onTheAir &&
-            tvData.popular &&
-            tvData.topRated && (
-              <>
-                <Slider
-                  data={tvData.airingToday}
-                  mediaType="tv"
-                  heading="Airing Today"
-                  viewAllUrl="/"
-                />
-                <Slider
-                  data={tvData.onTheAir}
-                  mediaType="tv"
-                  heading="On The Air"
-                  viewAllUrl="/"
-                />
-                <Slider
-                  data={tvData.popular}
-                  mediaType="tv"
-                  heading="Popular"
-                  viewAllUrl="/"
-                />
-                <Slider
-                  data={tvData.topRated}
-                  mediaType="tv"
-                  heading="Top Rated"
-                  viewAllUrl="/"
-                />
-              </>
-            )}
+          <div className="content-section__header">
+            <h2 className="content-section__heading">Popular Movies</h2>
+            <Link
+              to="/movie"
+              className="content-section__view-all"
+              draggable="false"
+            >
+              View all
+              <FaArrowRight className="content-section__view-all-post" />
+            </Link>
+          </div>
+          {popular.movie && (
+            <>
+              <Slider data={popular.movie} mediaType="movie" viewAllUrl="/" />
+            </>
+          )}
+        </section>
+        <section className="content-section">
+          <div className="content-section__header">
+            <h2 className="content-section__heading">Popular Tv Shows</h2>
+            <Link
+              to="/tv"
+              className="content-section__view-all"
+              draggable="false"
+            >
+              View all
+              <FaArrowRight className="content-section__view-all-post" />
+            </Link>
+          </div>
+          {popular.tv && (
+            <>
+              <Slider data={popular.tv} mediaType="tv" viewAllUrl="/" />
+            </>
+          )}
         </section>
         {scrollTopVisibility && (
           <button

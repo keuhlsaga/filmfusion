@@ -1,6 +1,9 @@
+@use "./" as *;
+
 .btn {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   padding: 0.5rem;
   background-color: transparent;
@@ -12,7 +15,16 @@
     background-color: blue;
   }
 
-  &:hover {
-    opacity: 0.8;
+  @media (hover: hover) {
+    &:hover {
+      opacity: 0.8;
+    }
   }
+}
+
+.link {
+}
+
+.flex-group {
+  @include flex-group;
 }

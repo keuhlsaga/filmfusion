@@ -1,8 +1,10 @@
 @use "../abstracts" as *;
 
 .carousel {
-  width: 100%;
+  width: min(120rem, 100%);
   height: 100svh;
+  min-height: 500px; // safety
+  margin-inline: auto;
   position: relative;
   overflow: hidden;
   -webkit-tap-highlight-color: transparent; /* For Safari and Chrome */
@@ -47,6 +49,7 @@
     height: 100%;
     object-fit: cover;
     object-position: center center;
+    aspect-ratio: 16/9;
     filter: brightness(0.6);
     pointer-events: none;
     user-select: none;
