@@ -79,6 +79,13 @@ const Carousel = ({ data }) => {
     setIsDragging(false);
   };
 
+  const handlePopState = (e) => {
+    // Close the modal if the popstate event is triggered
+    if (e.state?.modal) {
+      setModalOpen(false);
+    }
+  };
+
   useEffect(() => {
     autoSlide();
 
@@ -92,6 +99,7 @@ const Carousel = ({ data }) => {
       trailerModalRef.current.showModal();
       clearTimeout(timeOutRef.current);
       setModalOpen(true);
+      window.history.pushState({ modal: true }, "");
     }
     console.log(trailer);
   }, [trailer]);
@@ -106,12 +114,12 @@ const Carousel = ({ data }) => {
 
     if (modalOpen) {
       window.addEventListener("keydown", handleEscapeKey);
-      window.addEventListener("popstate", handleEscapeKey);
+      window.addEventListener("popstate", handlePopState);
     }
 
     return () => {
       window.removeEventListener("keydown", handleEscapeKey);
-      window.removeEventListener("popstate", handleEscapeKey);
+      window.removeEventListener("popstate", handlePopState);
     };
   }, [modalOpen]);
 
