@@ -73,9 +73,9 @@ const Home = () => {
   };
 
   useEffect(() => {
-    // if (!localStorage.getItem("filmfusion")) {
     setLoading(true);
-    if (true) {
+    if (!localStorage.getItem("filmfusion")) {
+      // if (true) {
       setTimeout(() => {
         fetchData();
         /*  (async () => {

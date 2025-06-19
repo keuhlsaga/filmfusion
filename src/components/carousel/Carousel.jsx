@@ -100,7 +100,9 @@ const Carousel = ({ data }) => {
       trailerModalRef.current.showModal();
       clearTimeout(timeOutRef.current);
       setModalOpen(true);
-      window.history.pushState({ modal: true }, "");
+      // history.pushState({ modal: true }, "");
+
+      history.pushState({ modalOpen: true }, "", "");
     }
     console.log(trailer);
   }, [trailer]);
@@ -115,11 +117,11 @@ const Carousel = ({ data }) => {
 
     if (modalOpen) {
       window.addEventListener("keydown", handleEscapeKey);
+      window.addEventListener("popstate", (e) => {
+        alert("here");
+        handleCloseModal();
+      });
     }
-    window.addEventListener("popstate", () => {
-      window.history.back();
-      alert("here");
-    });
 
     return () => {
       window.removeEventListener("keydown", handleEscapeKey);
