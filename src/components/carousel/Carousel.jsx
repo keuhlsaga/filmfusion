@@ -81,6 +81,7 @@ const Carousel = ({ data }) => {
 
   const handlePopState = (e) => {
     // Close the modal if the popstate event is triggered
+    alert("here");
     if (e.state?.modal) {
       handleCloseModal();
     }
@@ -108,14 +109,17 @@ const Carousel = ({ data }) => {
     const handleEscapeKey = (e) => {
       e.preventDefault();
       if (e.key === "Escape") {
-        handleCloseModal;
+        handleCloseModal();
       }
     };
 
     if (modalOpen) {
       window.addEventListener("keydown", handleEscapeKey);
-      window.addEventListener("popstate", handlePopState);
     }
+    window.addEventListener("popstate", () => {
+      window.history.back();
+      alert("here");
+    });
 
     return () => {
       window.removeEventListener("keydown", handleEscapeKey);
