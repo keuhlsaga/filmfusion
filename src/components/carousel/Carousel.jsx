@@ -3,6 +3,7 @@ import CarouselSlider from "./CarouselSlider";
 import CarouselItem from "./CarouselItem";
 import { FaX } from "react-icons/fa6";
 import useScrollLock from "../../utils/useScrollLock";
+import { IS_MOBILE } from "../../utils/utils";
 
 const Carousel = ({ data }) => {
   const [activeCarouselIndex, setActiveCarouselIndex] = useState(0);
@@ -106,8 +107,13 @@ const Carousel = ({ data }) => {
       window.addEventListener("keydown", handleEscapeKey);
     }
 
+    if (IS_MOBILE) {
+      window.addEventListener("popstate", handleEscapeKey);
+    }
+
     return () => {
       window.removeEventListener("keydown", handleEscapeKey);
+      window.removeEventListener("popstate", handleEscapeKey);
     };
   }, [modalOpen]);
 
