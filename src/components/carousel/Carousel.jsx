@@ -33,6 +33,7 @@ const Carousel = ({ data }) => {
   };
 
   const handleCloseModal = () => {
+    alert("closed");
     trailerModalRef.current.classList.toggle("carousel__trailer-modal--close");
     setTimeout(() => {
       trailerModalRef.current.classList.toggle(
@@ -105,9 +106,6 @@ const Carousel = ({ data }) => {
 
     if (modalOpen) {
       window.addEventListener("keydown", handleEscapeKey);
-    }
-
-    if (IS_MOBILE) {
       window.addEventListener("popstate", handleEscapeKey);
     }
 
