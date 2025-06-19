@@ -82,7 +82,7 @@ const Carousel = ({ data }) => {
   const handlePopState = (e) => {
     // Close the modal if the popstate event is triggered
     if (e.state?.modal) {
-      setModalOpen(false);
+      handleCloseModal();
     }
   };
 
